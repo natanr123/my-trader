@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select
 
 from app.api.deps import CurrentUser, SessionDep
-from app.models import Item, ItemCreate, ItemPublic, ItemsPublic, ItemUpdate, Message
+from app.models.models import Item, ItemCreate, ItemPublic, ItemsPublic, ItemUpdate, Message
 
 router = APIRouter(prefix="/items", tags=["items"])
 
@@ -17,7 +17,7 @@ def read_items(
     """
     Retrieve items.
     """
-    print('2222222222222222222')
+    print('333333333333333333333')
     if current_user.is_superuser:
         count_statement = select(func.count()).select_from(Item)
         count = session.exec(count_statement).one()
