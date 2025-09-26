@@ -138,38 +138,3 @@ def get_alpaca_client_paper():
 
 
 AlpacaDep = Annotated[MyAlpacaClient, Depends(get_alpaca_client_live)]
-
-
-# id = UUID('ee28ab4e-cbbd-4c9d-a699-4d080a235a77')
-# client_order_id = '203fa50a-fbe1-4844-a5f5-2cb06949282e'
-# created_at = datetime.datetime(2025, 8, 26, 19, 33, 44, 495718, tzinfo=TzInfo(UTC))
-# updated_at = datetime.datetime(2025, 8, 26, 19, 33, 44, 497458, tzinfo=TzInfo(UTC))
-# submitted_at = datetime.datetime(2025, 8, 26, 19, 33, 44, 495718, tzinfo=TzInfo(UTC))
-# filled_at = None
-# expired_at = None
-# expires_at = datetime.datetime(2025, 8, 26, 20, 0, tzinfo=TzInfo(UTC))
-# canceled_at = None
-# failed_at = None
-# replaced_at = None
-# replaced_by = None
-# replaces = None
-# asset_id = UUID('b0b6dd9d-8b9b-48a9-ba46-b9d54906e415')
-# symbol = 'AAPL'
-# asset_class = < AssetClass.US_EQUITY: 'us_equity' > notional = '100'
-# qty = None
-# filled_qty = '0'
-# filled_avg_price = None
-# order_class = < OrderClass.SIMPLE: 'simple' > order_type = < OrderType.MARKET: 'market' > type = < OrderType.MARKET: 'market' > side = < OrderSide.BUY: 'buy' > time_in_force = < TimeInForce.DAY: 'day' > limit_price = None
-# stop_price = None
-# status = < OrderStatus.PENDING_NEW: 'pending_new' > extended_hours = False
-# legs = None
-# trail_percent = None
-# trail_price = None
-# hwm = None
-# position_intent = < PositionIntent.BUY_TO_OPEN: 'buy_to_open' > ratio_qty = None
-
-
-# alpaca_order:  id=UUID('9744ebb1-4520-494c-9c1f-82989c14a8f8')
-# client_order_id='2cce8360-b220-4e37-8945-7e6d0132a67e' created_at=datetime.datetime(2025, 8, 27, 17, 13, 56, 80575, tzinfo=TzInfo(UTC)) updated_at=datetime.datetime(2025, 8, 27, 17, 13, 56, 81044, tzinfo=TzInfo(UTC)) submitted_at=datetime.datetime(2025, 8, 27, 17, 13, 56, 80575, tzinfo=TzInfo(UTC)) filled_at=None expired_at=None expires_at=datetime.datetime(2025, 8, 27, 20, 0, tzinfo=TzInfo(UTC)) canceled_at=None failed_at=None replaced_at=None replaced_by=None replaces=None asset_id=UUID('b6d1aa75-5c9c-4353-a305-9e2caa1925ab') symbol='MSFT' asset_class=<AssetClass.US_EQUITY: 'us_equity'> notional=None qty='0.159048942' filled_qty='0' filled_avg_price=None order_class=<OrderClass.SIMPLE: 'simple'> order_type=<OrderType.MARKET: 'market'> type=<OrderType.MARKET: 'market'> side=<OrderSide.SELL: 'sell'> time_in_force=<TimeInForce.DAY: 'day'> limit_price=None stop_price=None
-# status=<OrderStatus.PENDING_NEW: 'pending_new'> extended_hours=False legs=None trail_percent=None trail_price=None hwm=None position_intent=<PositionIntent.SELL_TO_CLOSE: 'sell_to_close'> ratio_qty=None
-
