@@ -23,7 +23,6 @@ dependencies = [
     "pyjwt<3.0.0,>=2.8.0",
     "alpaca-py>=0.42.1,<0.43.0",
     "transitions>=0.9.3",
-    "ipython>=8.37.0",
 ]
 
 [tool.uv]
