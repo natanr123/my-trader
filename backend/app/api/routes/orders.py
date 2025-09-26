@@ -6,9 +6,7 @@ from app.api.deps import SessionDep
 # from app.api.deps
 from app.api.dependencies.my_alpaca_client import AlpacaDep, AlpacaOrderStatus, AlpacaOrder
 
-from models import order
-from models.order import Order, OrderCreate, OrderPublic, VirtualOrderStatus
-from datetime import timedelta
+from app.models.order import Order, OrderCreate, OrderPublic, VirtualOrderStatus
 from services.my_file_log import MyFileLog
 from alpaca.common.exceptions import APIError
 
