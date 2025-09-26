@@ -1,26 +1,28 @@
 #!/usr/bin/env python
 """
-Minimal FastAPI/SQLModel console (container-friendly).
-Run from inside the backend container:
+Host-side FastAPI/SQLModel console using ptpython.
+No .env loading here — relies on process env / Settings defaults.
 
-  docker compose exec backend uv run python scripts/console.py
+Run on host:
+  cd backend
+  uv run python scripts/console.py
 """
 
 from __future__ import annotations
 import sys
 from pathlib import Path
 
-# Ensure project root (backend/) is importable so `import app...` works
+# Ensure backend/ on sys.path so `import app...` works
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-# Import DB bits and (optionally) preload models
+# App context
 from sqlmodel import Session, select  # noqa: E402
 from app.core.db import engine        # noqa: E402
 
+# (Optional) import models so SQLModel metadata is populated
 def _import_models() -> None:
-    """Eager-import app.models.* so SQLModel metadata is populated (optional)."""
     import importlib, pkgutil
     try:
         pkg = importlib.import_module("app.models")
@@ -31,11 +33,11 @@ def _import_models() -> None:
 
 _import_models()
 
-# Open a session (close it manually if you open many)
+# Open a session (close when done if you open many)
 session = Session(engine)
 
 BANNER = """
-🚀 FastAPI/SQLModel console
+🚀 FastAPI/SQLModel console (ptpython, host)
 
 Preloaded:
   - engine  -> app.core.db.engine
@@ -43,28 +45,29 @@ Preloaded:
   - select  -> sqlmodel.select
   - app.models.* imported (if present)
 
-Tips:
-  %load_ext autoreload ; %autoreload 2
+Use Tab/Ctrl-Space for completions. F6 shows docstrings.
 """
 
-def _start():
+def main() -> None:
+    # Pretty printing if available
     try:
-        from IPython import embed
-        # nice quality-of-life extras (safe if they fail)
-        try:
-            from IPython import get_ipython
-            ip = get_ipython()
-            if ip:
-                ip.run_line_magic("load_ext", "autoreload")
-                ip.run_line_magic("autoreload", "2")
-                ip.run_line_magic("autoawait", "asyncio")
-        except Exception:
-            pass
-        embed(header=BANNER, colors="neutral")
+        from rich import pretty
+        pretty.install()
+    except Exception:
+        pass
+
+    from ptpython.repl import embed
+    history_file = str(ROOT / ".ptpython_history")
+    try:
+        embed(
+            globals(), locals(),
+            title="FastAPI Console",
+            history_filename=history_file,
+        )
     except Exception:
         print(BANNER)
         import code
         code.interact(local=globals())
 
 if __name__ == "__main__":
-    _start()
+    main()
