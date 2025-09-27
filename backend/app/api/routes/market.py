@@ -10,7 +10,7 @@ router = APIRouter(prefix="/market", tags=["market"])
 
 
 @router.get("/next_close_date")
-def show_order(alpaca_client: AlpacaDep):
+def next_close_date(alpaca_client: AlpacaDep):
     return {"date": alpaca_client.get_next_close().date().isoformat()}
 
 
