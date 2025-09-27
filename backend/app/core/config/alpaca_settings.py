@@ -22,6 +22,10 @@ class AlpacaSettings(BaseSettings):
         extra="ignore",
     )
 
+    ALPACA_NAME: str
+    ALPACA_API_KEY: str
+    ALPACA_SECRET_KEY: str
+    ALPACA_PAPER: bool
 
 
 settings = Settings()  # type: ignore

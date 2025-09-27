@@ -89,6 +89,7 @@ services:
         condition: service_completed_successfully
     env_file:
       - .env
+      - backend/.alpaca.env
     environment:
       - DOMAIN=${DOMAIN}
       - FRONTEND_HOST=${FRONTEND_HOST?Variable not set}
