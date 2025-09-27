@@ -202,13 +202,11 @@ export type OrdersCreateOrderData = {
 
 export type OrdersCreateOrderResponse = (OrderPublic);
 
-export type OrdersShowOrderResponse = (unknown);
-
-export type OrdersShowOrder1Data = {
+export type OrdersShowOrderData = {
     id: number;
 };
 
-export type OrdersShowOrder1Response = (OrderPublic);
+export type OrdersShowOrderResponse = (OrderPublic);
 
 export type OrdersSyncOrdersResponse = (unknown);
 
