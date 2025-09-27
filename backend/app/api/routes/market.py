@@ -13,6 +13,11 @@ router = APIRouter(prefix="/market", tags=["market"])
 def next_close_date(alpaca_client: AlpacaDep):
     return {"date": alpaca_client.get_next_close().date().isoformat()}
 
+@router.get("/is_next_close_today")
+def is_next_close_today(alpaca_client: AlpacaDep) -> bool:
+    return alpaca_client.is_next_close_today()
+
+
 
 
 
