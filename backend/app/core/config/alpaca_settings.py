@@ -27,5 +27,14 @@ class AlpacaSettings(BaseSettings):
     ALPACA_SECRET_KEY: str
     ALPACA_PAPER: bool
 
+    @computed_field
+    @property
+    def credentials(self) -> dict:
+        return {
+            'api-key': self.ALPACA_API_KEY,
+            'secret-key': self.ALPACA_API_KEY,
+            'paper': self.ALPACA_PAPER,
+        }
 
-settings = Settings()  # type: ignore
+
+alpaca_settings = AlpacaSettings()  # type: ignore
