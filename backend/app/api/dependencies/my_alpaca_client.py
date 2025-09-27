@@ -121,6 +121,7 @@ class MyAlpacaClient:
         return next_close.date() == current_time_utc.date()
 
 def get_alpaca_client():
+    print('alpaca_settings.credentialsalpaca_settings.credentialsalpaca_settings.credentials: ', alpaca_settings.credentials)
     return MyAlpacaClient(alpaca_settings.credentials)
 
 

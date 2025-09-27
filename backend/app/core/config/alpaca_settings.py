@@ -32,7 +32,7 @@ class AlpacaSettings(BaseSettings):
     def credentials(self) -> dict:
         return {
             'api-key': self.ALPACA_API_KEY,
-            'secret-key': self.ALPACA_API_KEY,
+            'secret-key': self.ALPACA_SECRET_KEY,
             'paper': self.ALPACA_PAPER,
         }
 
