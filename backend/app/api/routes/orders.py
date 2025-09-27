@@ -41,10 +41,6 @@ def list_orders(
     orders = results.all()
     return orders
 
-@router.get("/next_close_date")
-def show_order(alpaca_client: AlpacaDep):
-    return {"date": alpaca_client.get_next_close().date().isoformat()}
-
 @router.get("/{id}")
 def show_order(id: int, session: SessionDep) -> OrderPublic:
     order = session.get(Order, id)
