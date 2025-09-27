@@ -120,18 +120,8 @@ class MyAlpacaClient:
         next_close = clock.next_close.astimezone(timezone.utc)
         return next_close.date() == current_time_utc.date()
 
-
-
-
-
-
-
-
-
-
 def get_alpaca_client():
-    credentials = get_alpaca_credentials(alpaca_settings.credentials)
-    return MyAlpacaClient(credentials)
+    return MyAlpacaClient(alpaca_settings.credentials)
 
 
 AlpacaDep = Annotated[MyAlpacaClient, Depends(get_alpaca_client)]
