@@ -44,6 +44,33 @@ export type NewPassword = {
     new_password: string;
 };
 
+export type OrderCreate = {
+    symbol: string;
+    amount: number;
+};
+
+export type OrderPublic = {
+    symbol: string;
+    amount: number;
+    alpaca_buy_order_id?: (string | null);
+    alpaca_sell_order_id?: (string | null);
+    alpaca_client_order_id?: (string | null);
+    quantity?: number;
+    force_sell_at?: (string | null);
+    buy_filled_avg_price?: (number | null);
+    buy_filled_qty?: (number | null);
+    sell_filled_avg_price?: (number | null);
+    sell_filled_qty?: (number | null);
+    target_profit_price?: (number | null);
+    stop_loss_price?: (number | null);
+    status?: VirtualOrderStatus;
+    created_at?: string;
+    filled_at?: (string | null);
+    sold_at?: (string | null);
+    error_message?: (string | null);
+    id: number;
+};
+
 export type PrivateUserCreate = {
     email: string;
     password: string;
@@ -107,6 +134,8 @@ export type ValidationError = {
     type: string;
 };
 
+export type VirtualOrderStatus = 'new' | 'buy_pending_new' | 'buy_accepted' | 'buy_filled' | 'sell_pending_new' | 'sell_accepted' | 'sell_filled';
+
 export type ItemsReadItemsData = {
     limit?: number;
     skip?: number;
@@ -164,6 +193,26 @@ export type LoginRecoverPasswordHtmlContentData = {
 };
 
 export type LoginRecoverPasswordHtmlContentResponse = (string);
+
+export type OrdersListOrdersResponse = (Array<OrderPublic>);
+
+export type OrdersCreateOrderData = {
+    requestBody: OrderCreate;
+};
+
+export type OrdersCreateOrderResponse = (OrderPublic);
+
+export type OrdersShowOrderResponse = (unknown);
+
+export type OrdersShowOrder1Data = {
+    id: number;
+};
+
+export type OrdersShowOrder1Response = (OrderPublic);
+
+export type OrdersSyncOrdersResponse = (unknown);
+
+export type OrdersHelloResponse = (unknown);
 
 export type PrivateCreateUserData = {
     requestBody: PrivateUserCreate;

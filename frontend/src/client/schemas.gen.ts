@@ -212,6 +212,207 @@ export const NewPasswordSchema = {
     title: 'NewPassword'
 } as const;
 
+export const OrderCreateSchema = {
+    properties: {
+        symbol: {
+            type: 'string',
+            title: 'Symbol'
+        },
+        amount: {
+            type: 'number',
+            exclusiveMinimum: 0,
+            title: 'Amount'
+        }
+    },
+    additionalProperties: false,
+    type: 'object',
+    required: ['symbol', 'amount'],
+    title: 'OrderCreate'
+} as const;
+
+export const OrderPublicSchema = {
+    properties: {
+        symbol: {
+            type: 'string',
+            title: 'Symbol'
+        },
+        amount: {
+            type: 'number',
+            exclusiveMinimum: 0,
+            title: 'Amount'
+        },
+        alpaca_buy_order_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Alpaca Buy Order Id'
+        },
+        alpaca_sell_order_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Alpaca Sell Order Id'
+        },
+        alpaca_client_order_id: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Alpaca Client Order Id'
+        },
+        quantity: {
+            type: 'number',
+            title: 'Quantity',
+            default: 0
+        },
+        force_sell_at: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Force Sell At'
+        },
+        buy_filled_avg_price: {
+            anyOf: [
+                {
+                    type: 'number'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Buy Filled Avg Price'
+        },
+        buy_filled_qty: {
+            anyOf: [
+                {
+                    type: 'number'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Buy Filled Qty'
+        },
+        sell_filled_avg_price: {
+            anyOf: [
+                {
+                    type: 'number'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Sell Filled Avg Price'
+        },
+        sell_filled_qty: {
+            anyOf: [
+                {
+                    type: 'number'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Sell Filled Qty'
+        },
+        target_profit_price: {
+            anyOf: [
+                {
+                    type: 'number'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Target Profit Price'
+        },
+        stop_loss_price: {
+            anyOf: [
+                {
+                    type: 'number'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Stop Loss Price'
+        },
+        status: {
+            '$ref': '#/components/schemas/VirtualOrderStatus',
+            default: 'new'
+        },
+        created_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Created At'
+        },
+        filled_at: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Filled At'
+        },
+        sold_at: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Sold At'
+        },
+        error_message: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Error Message'
+        },
+        id: {
+            type: 'integer',
+            title: 'Id'
+        }
+    },
+    type: 'object',
+    required: ['symbol', 'amount', 'id'],
+    title: 'OrderPublic'
+} as const;
+
 export const PrivateUserCreateSchema = {
     properties: {
         email: {
@@ -523,4 +724,10 @@ export const ValidationErrorSchema = {
     type: 'object',
     required: ['loc', 'msg', 'type'],
     title: 'ValidationError'
+} as const;
+
+export const VirtualOrderStatusSchema = {
+    type: 'string',
+    enum: ['new', 'buy_pending_new', 'buy_accepted', 'buy_filled', 'sell_pending_new', 'sell_accepted', 'sell_filled'],
+    title: 'VirtualOrderStatus'
 } as const;

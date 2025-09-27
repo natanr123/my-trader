@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, OrdersListOrdersResponse, OrdersCreateOrderData, OrdersCreateOrderResponse, OrdersShowOrderResponse, OrdersShowOrder1Data, OrdersShowOrder1Response, OrdersSyncOrdersResponse, OrdersHelloResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class ItemsService {
     /**
@@ -209,6 +209,95 @@ export class LoginService {
             errors: {
                 422: 'Validation Error'
             }
+        });
+    }
+}
+
+export class OrdersService {
+    /**
+     * List Orders
+     * @returns OrderPublic Successful Response
+     * @throws ApiError
+     */
+    public static listOrders(): CancelablePromise<OrdersListOrdersResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/orders/'
+        });
+    }
+    
+    /**
+     * Create Order
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns OrderPublic Successful Response
+     * @throws ApiError
+     */
+    public static createOrder(data: OrdersCreateOrderData): CancelablePromise<OrdersCreateOrderResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/orders/',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Show Order
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static showOrder(): CancelablePromise<OrdersShowOrderResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/orders/next_close_date'
+        });
+    }
+    
+    /**
+     * Show Order
+     * @param data The data for the request.
+     * @param data.id
+     * @returns OrderPublic Successful Response
+     * @throws ApiError
+     */
+    public static showOrder1(data: OrdersShowOrder1Data): CancelablePromise<OrdersShowOrder1Response> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/orders/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Sync Orders
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static syncOrders(): CancelablePromise<OrdersSyncOrdersResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/orders/sync'
+        });
+    }
+    
+    /**
+     * Hello
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static hello(): CancelablePromise<OrdersHelloResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/orders/hello'
         });
     }
 }
