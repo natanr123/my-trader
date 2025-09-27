@@ -9,6 +9,7 @@ from typing import Annotated
 from fastapi import Depends
 from datetime import datetime, timezone
 from decimal import Decimal
+from app.core.config.alpaca_settings import alpaca_settings
 
 
 from alpaca.trading.models import OrderStatus as AlpacaOrderStatus
@@ -126,15 +127,11 @@ class MyAlpacaClient:
 
 
 
-def get_alpaca_client_live():
-    # credentials = get_alpaca_credentials('alpaca_key_live.json')
-    credentials = get_alpaca_credentials('alpaca_key_paper.json')
-    return MyAlpacaClient(credentials)
 
-def get_alpaca_client_paper():
-    # credentials = get_alpaca_credentials('alpaca_key_live.json')
-    credentials = get_alpaca_credentials('alpaca_key_paper.json')
+
+def get_alpaca_client():
+    credentials = get_alpaca_credentials(alpaca_settings.credentials)
     return MyAlpacaClient(credentials)
 
 
-AlpacaDep = Annotated[MyAlpacaClient, Depends(get_alpaca_client_live)]
+AlpacaDep = Annotated[MyAlpacaClient, Depends(get_alpaca_client)]
