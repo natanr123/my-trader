@@ -1,13 +1,14 @@
 from datetime import datetime, timezone, timedelta
 from enum import Enum
 from typing import Optional
-from sqlmodel import SQLModel, Field, Session
+from sqlmodel import SQLModel, Field, Relationship
 from transitions import Machine, EventData
 from pydantic import PrivateAttr
 from uuid import UUID
 from app.models.soft_delete_mixin import SoftDeleteMixin
 from app.utils.my_alpaca_client import AlpacaOrder, MyAlpacaClient, AlpacaOrderStatus
 from alpaca.common.exceptions import APIError
+from app.models.user import User
 
 class VirtualOrderStatus(str, Enum):
     NEW = "new"
@@ -49,6 +50,8 @@ class OrderBase(SoftDeleteMixin, OrderCore):
     filled_at: Optional[datetime] = None
     sold_at: Optional[datetime] = None
     error_message: Optional[str] = None
+    owner: User = Relationship(back_populates="items")
+
     _machine: Optional[Machine] = PrivateAttr(default=None)
 
 class Order(OrderBase, table=True):
