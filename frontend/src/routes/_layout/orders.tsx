@@ -8,7 +8,6 @@ import {
   Table,
   Text,
   VStack,
-  createToaster,
 } from "@chakra-ui/react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
@@ -18,13 +17,10 @@ import { FiRefreshCw, FiTrash2, FiTrendingUp } from "react-icons/fi"
 import { OrdersService } from "@/client"
 import AddOrder from "@/components/Orders/AddOrder"
 import PendingItems from "@/components/Pending/PendingItems"
+import { toaster } from "@/components/ui/toaster"
 
 export const Route = createFileRoute("/_layout/orders")({
   component: Orders,
-})
-
-const toaster = createToaster({
-  placement: "top-end",
 })
 
 function OrdersTable() {
@@ -47,7 +43,7 @@ function OrdersTable() {
       setDeletingOrderId(null)
       toaster.create({
         title: "Order deleted successfully",
-        status: "success",
+        type: "success",
       })
     },
     onError: (error: any) => {
@@ -59,7 +55,7 @@ function OrdersTable() {
       toaster.create({
         title: "Delete failed",
         description: errorMessage,
-        status: "error",
+        type: "error",
       })
     },
   })
@@ -74,7 +70,7 @@ function OrdersTable() {
       setSyncingOrderId(null)
       toaster.create({
         title: "Order synchronized successfully",
-        status: "success",
+        type: "success",
       })
     },
     onError: (error: any) => {
@@ -88,7 +84,7 @@ function OrdersTable() {
       toaster.create({
         title: "Sync failed",
         description: errorMessage,
-        status: "error",
+        type: "error",
       })
     },
   })
