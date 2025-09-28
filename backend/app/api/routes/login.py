@@ -10,7 +10,7 @@ from app.api.deps import CurrentUser, SessionDep, get_current_active_superuser
 from app.core import security
 from app.core.config import settings
 from app.core.security import get_password_hash
-from app.models.models import Message
+from app.models.message import Message
 from app.models.user import UserPublic
 from app.models.token import NewPassword, Token
 from app.utils import (
