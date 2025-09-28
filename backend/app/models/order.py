@@ -50,7 +50,7 @@ class OrderBase(SoftDeleteMixin, OrderCore):
     filled_at: Optional[datetime] = None
     sold_at: Optional[datetime] = None
     error_message: Optional[str] = None
-    owner: User = Relationship(back_populates="items")
+    owner: User = Relationship(back_populates="orders")
 
     _machine: Optional[Machine] = PrivateAttr(default=None)
 
