@@ -4,7 +4,6 @@ from alpaca.data.requests import StockLatestQuoteRequest
 from alpaca.trading.requests import MarketOrderRequest
 from alpaca.trading.enums import OrderSide, TimeInForce
 from alpaca.trading.models import Order as AlpacaOrder, Position as AlpacaPosition
-from app.utils.key_reader import get_alpaca_credentials
 from typing import Annotated
 from fastapi import Depends
 from datetime import datetime, timezone
