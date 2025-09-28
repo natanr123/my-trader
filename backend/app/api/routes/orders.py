@@ -43,7 +43,14 @@ def list_orders(
 
 
 
-@router.post("/{id}/sync")
+@router.post(
+    "/{id}/sync",
+    responses={
+        200: {"description": "Order synchronized successfully"},
+        404: {"description": "Order not found"},
+        500: {"description": "Internal server error during synchronization"}
+    }
+)
 def sync_order(id: int, session: SessionDep, alpaca_client: AlpacaDep) -> OrderPublic:
     order = session.get(Order, id)
     order.sync(alpaca_client=alpaca_client)
