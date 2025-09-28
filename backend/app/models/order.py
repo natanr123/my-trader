@@ -6,7 +6,8 @@ from transitions import Machine, EventData
 from pydantic import PrivateAttr
 from uuid import UUID
 from app.models.soft_delete_mixin import SoftDeleteMixin
-
+from app.api.deps.my_alpaca_client import AlpacaOrder, MyAlpacaClient, AlpacaOrderStatus
+from alpaca.common.exceptions import APIError
 
 class VirtualOrderStatus(str, Enum):
     NEW = "new"
@@ -72,7 +73,7 @@ class Order(OrderBase, table=True):
         self.stop_loss_price = filled_avg_price * 0.95
         self.machine.buy_filled()
 
-    def sell_submitted(self, alpaca_order_id: UUID):
+    def sell_submitted(self, alpaca_order_id: UUID | None):
         self.alpaca_sell_order_id = alpaca_order_id
         self.machine.sell_submitted()
 
@@ -83,6 +84,62 @@ class Order(OrderBase, table=True):
         self.sell_filled_avg_price = filled_avg_price
         self.sell_filled_qty = filled_qty
         self.machine.sell_filled()
+
+    def sync(self, alpaca_client: MyAlpacaClient):
+        if self.alpaca_buy_order_id:
+            alpaca_buy_order = alpaca_client.get_order_by_id(self.alpaca_buy_order_id)
+        else:
+            raise Exception('Order was created but no matching alpaca buy order')
+
+        alpaca_sell_order: AlpacaOrder | None = None
+        if self.alpaca_sell_order_id:
+            alpaca_sell_order = alpaca_client.get_order_by_id(self.alpaca_sell_order_id)
+
+        print('working on order id=', self.id, 'status=', self.status, 'alpaca_status=', alpaca_buy_order.status, 'alpaca_sell_order=', bool(alpaca_sell_order))
+
+        # NEW -> BUY_PENDING_NEW -> BUY_ACCEPTED -> BUY_FILLED -> SELL_PENDING_NEW -> SELL_ACCEPTED -> SELL_FILLED
+        match self.status:
+            case VirtualOrderStatus.BUY_PENDING_NEW:
+                if alpaca_buy_order.status == AlpacaOrderStatus.ACCEPTED:
+                    self.buy_accepted()
+                elif alpaca_buy_order.status == AlpacaOrderStatus.FILLED:
+                    self.buy_accepted()
+                    print('the order id=', self.id, 'moving from buying to filled')
+                    market_close_at = alpaca_client.get_next_close()
+                    self.buy_filled(filled_avg_price=alpaca_buy_order.filled_avg_price,
+                                     buy_filled_qty=alpaca_buy_order.filled_qty, market_close_at=market_close_at)
+            case VirtualOrderStatus.BUY_ACCEPTED:
+                if alpaca_buy_order.status == AlpacaOrderStatus.ACCEPTED:
+                    print('the order id=', self.id, 'waiting for it to be filled. Nothing to do for now')
+                elif alpaca_buy_order.status == AlpacaOrderStatus.FILLED:
+                    print('the order id=', self.id, 'is moving from buying accepted buying to filled')
+                    market_close_at = alpaca_client.get_next_close()
+                    self.buy_filled(filled_avg_price=alpaca_buy_order.filled_avg_price,
+                                     buy_filled_qty=alpaca_buy_order.filled_qty, market_close_at=market_close_at)
+            case VirtualOrderStatus.BUY_FILLED:
+                sell_time_passed = alpaca_client.is_time_passed(self.force_sell_at)
+                if sell_time_passed:
+                    try:
+                        alpaca_sell_order = alpaca_client.close_position(self.symbol)
+                        # my_file_log.append('the order id=', order.id, 'buy was filled', 'sell position not found', 'sending sell order -> buy_pending_new')
+                        self.sell_submitted(alpaca_order_id=alpaca_sell_order.id)
+                    except APIError as e:
+                        # my_file_log.append('the order id=', order.id, 'buy was filled', 'sell position arelady FOUND', 'skipping to sell filled')
+                        self.sell_submitted(alpaca_order_id=None)
+                        self.sell_accepted()
+                        self.sell_filled(filled_avg_price=0, filled_qty=0)
+                else:
+                    print('the order id=', self.id, 'was buy filled', 'but it is not time-passed', 'doing nothing')
+            case VirtualOrderStatus.SELL_PENDING_NEW:
+                if alpaca_sell_order.status == AlpacaOrderStatus.ACCEPTED:
+                    # my_file_log.append('the order id=', order.id, 'sell order was accepted')
+                    self.sell_accepted()
+                elif alpaca_sell_order.status == AlpacaOrderStatus.FILLED:
+                    # my_file_log.append('the order id=', order.id, 'sell order was filled')
+                    self.sell_accepted()
+                    self.sell_filled(filled_avg_price=alpaca_buy_order.filled_avg_price,
+                                      filled_qty=alpaca_buy_order.filled_qty)
+
 
     @staticmethod
     def create_machine(model) -> Machine:
