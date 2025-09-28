@@ -55,13 +55,13 @@ def list_orders(
         500: {"description": "Internal server error during synchronization"}
     }
 )
-def sync_order(id: int, session: SessionDep, alpaca_client: AlpacaDep, current_user: CurrentUser) -> OrderPublic:
+def sync_order(id: int, session: SessionDep, alpaca_client: AlpacaDep, current_user: CurrentUser, order_service: OrderServiceDep) -> OrderPublic:
     order = session.get(Order, id)
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
     if order.owner_id != current_user.id:
         raise HTTPException(status_code=403, detail="Not authorized to sync this order")
-    order.sync(alpaca_client=alpaca_client)
+    order_service.sync_order(order=order, alpaca_client=alpaca_client)
     session.commit()
     session.refresh(order)
     return order
@@ -87,7 +87,7 @@ def delete_order(id: int, session: SessionDep, current_user: CurrentUser):
 @router.post("/sync")
 def sync_orders(
     session: SessionDep,
-    alpaca_client: AlpacaDep
+    alpaca_client: AlpacaDep, order_service: OrderServiceDep
 ):
     # my_file_log = MyFileLog('tmp/syncs.log')
 
@@ -99,7 +99,7 @@ def sync_orders(
 
     print('Total orders: ', total_orders)
     for order in orders:
-        order.sync(alpaca_client=alpaca_client)
+        order_service.sync_order(order=order, alpaca_client=alpaca_client)
         session.commit()
     return {"result": "success"}
 

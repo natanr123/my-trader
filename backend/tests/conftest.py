@@ -13,16 +13,18 @@ from tests.utils.user import authentication_token_from_email
 from tests.utils.utils import get_superuser_token_headers
 
 
-@pytest.fixture(scope="session", autouse=True)
-def db() -> Generator[Session, None, None]:
+
+
+@pytest.fixture(name="session")
+def session_fixture():
+    engine = create_test_db_engine()
+    SQLModel.metadata.create_all(engine)
     with Session(engine) as session:
-        init_db(session)
+        def get_session_override():
+            return session
+        app.dependency_overrides[get_session] = get_session_override
         yield session
-        statement = delete(Item)
-        session.execute(statement)
-        statement = delete(User)
-        session.execute(statement)
-        session.commit()
+        app.dependency_overrides.clear()
 
 
 @pytest.fixture(scope="module")
