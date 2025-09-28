@@ -41,6 +41,8 @@ def list_orders(
     orders = results.all()
     return orders
 
+
+
 @router.post("/{id}/sync")
 def sync_order(id: int, session: SessionDep, alpaca_client: AlpacaDep) -> OrderPublic:
     order = session.get(Order, id)
@@ -114,7 +116,18 @@ def sync_order(id: int, session: SessionDep, alpaca_client: AlpacaDep) -> OrderP
 @router.get("/{id}")
 def show_order(id: int, session: SessionDep) -> OrderPublic:
     order = session.get(Order, id)
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
     return order
+
+@router.delete("/{id}", status_code=204)
+def delete_order(id: int, session: SessionDep):
+    order = session.get(Order, id)
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    session.delete(order)
+    session.commit()
 
 @router.post("/sync")
 def sync_orders(
