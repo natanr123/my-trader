@@ -275,7 +275,7 @@ export class OrdersService {
      * Sync Order
      * @param data The data for the request.
      * @param data.id
-     * @returns OrderPublic Successful Response
+     * @returns OrderPublic Order synchronized successfully
      * @throws ApiError
      */
     public static syncOrder(data: OrdersSyncOrderData): CancelablePromise<OrdersSyncOrderResponse> {
@@ -286,7 +286,9 @@ export class OrdersService {
                 id: data.id
             },
             errors: {
-                422: 'Validation Error'
+                404: 'Order not found',
+                422: 'Validation Error',
+                500: 'Internal server error during synchronization'
             }
         });
     }
