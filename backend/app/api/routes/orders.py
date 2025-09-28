@@ -19,6 +19,20 @@ def create_order(
     order = order_service.create_order_with_alpaca_order(user=current_user, order_in=order_in, session=session, alpaca_client=alpaca_client)
     return order
 
+@router.post("/by_admin", response_model=OrderPublic)
+def create_order_by_admin(
+    order_in: OrderCreate,
+    session: SessionDep,
+    alpaca_client: AlpacaDep,
+    order_service: OrderServiceDep
+):
+    from app.models.user import User
+    admin = session.exec(select(User).where(User.is_superuser == True)).first()
+    if not admin:
+        raise HTTPException(status_code=404, detail="No admin user found")
+    order = order_service.create_order_with_alpaca_order(user=admin, order_in=order_in, session=session, alpaca_client=alpaca_client)
+    return order
+
 
 @router.get("/")
 def list_orders(
