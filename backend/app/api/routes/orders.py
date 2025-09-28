@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from sqlmodel import select
 
 from app.api.deps import SessionDep
-from app.api.dependencies.my_alpaca_client import AlpacaDep, AlpacaOrderStatus, AlpacaOrder
+from app.api.deps.my_alpaca_client import AlpacaDep, AlpacaOrderStatus, AlpacaOrder
 
 from app.models.order import Order, OrderCreate, OrderPublic, VirtualOrderStatus
 from alpaca.common.exceptions import APIError
