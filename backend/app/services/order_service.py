@@ -2,7 +2,7 @@ from sqlmodel import Session
 
 from app.models.order import Order
 from app.models.order import OrderCreate
-from app.utils.my_alpaca_client import MyAlpacaClient
+from app.clients.my_alpaca_client import MyAlpacaClient
 from app.models.user import User
 
 
