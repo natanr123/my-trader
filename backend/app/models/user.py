@@ -43,8 +43,8 @@ class UpdatePassword(SQLModel):
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
-    items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
-    orders: list = Relationship(back_populates="owner", cascade_delete=True)
+    items: list["app.models.item.Item"] = Relationship(back_populates="owner", cascade_delete=True)
+    # orders: list["Order"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
 # Properties to return via API, id is always required
