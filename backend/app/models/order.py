@@ -50,12 +50,12 @@ class OrderBase(SoftDeleteMixin, OrderCore):
     filled_at: Optional[datetime] = None
     sold_at: Optional[datetime] = None
     error_message: Optional[str] = None
-    owner: User = Relationship(back_populates="orders")
 
     _machine: Optional[Machine] = PrivateAttr(default=None)
 
 class Order(OrderBase, table=True):
     id: Optional[int] = Field(primary_key=True)
+    owner: User = Relationship(back_populates="orders")
 
     def __init__(self, **data):
         super().__init__(**data)
