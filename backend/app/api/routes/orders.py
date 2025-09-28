@@ -5,7 +5,6 @@ from app.api.deps import SessionDep
 from app.api.deps.my_alpaca_client import AlpacaDep, AlpacaOrderStatus, AlpacaOrder
 
 from app.models.order import Order, OrderCreate, OrderPublic, VirtualOrderStatus
-from alpaca.common.exceptions import APIError
 
 
 router = APIRouter(prefix="/orders", tags=["orders"])
@@ -91,12 +90,6 @@ def sync_orders(
     for order in orders:
         order.sync(alpaca_client=alpaca_client)
     return {"result": "success"}
-
-
-@router.get("/hello")
-def hello():
-    return "Hello World"
-
 
 
 
