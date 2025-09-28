@@ -52,6 +52,8 @@ export type OrderCreate = {
 export type OrderPublic = {
     symbol: string;
     amount: number;
+    deleted_at?: (string | null);
+    deleted_by?: (string | null);
     alpaca_buy_order_id?: (string | null);
     alpaca_sell_order_id?: (string | null);
     alpaca_client_order_id?: (string | null);
@@ -194,6 +196,10 @@ export type LoginRecoverPasswordHtmlContentData = {
 
 export type LoginRecoverPasswordHtmlContentResponse = (string);
 
+export type MarketNextCloseDateResponse = (unknown);
+
+export type MarketIsNextCloseTodayResponse = (boolean);
+
 export type OrdersListOrdersResponse = (Array<OrderPublic>);
 
 export type OrdersCreateOrderData = {
@@ -202,11 +208,23 @@ export type OrdersCreateOrderData = {
 
 export type OrdersCreateOrderResponse = (OrderPublic);
 
+export type OrdersSyncOrderData = {
+    id: number;
+};
+
+export type OrdersSyncOrderResponse = (OrderPublic);
+
 export type OrdersShowOrderData = {
     id: number;
 };
 
 export type OrdersShowOrderResponse = (OrderPublic);
+
+export type OrdersDeleteOrderData = {
+    id: number;
+};
+
+export type OrdersDeleteOrderResponse = (void);
 
 export type OrdersSyncOrdersResponse = (unknown);
 

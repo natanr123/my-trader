@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, OrdersListOrdersResponse, OrdersCreateOrderData, OrdersCreateOrderResponse, OrdersShowOrderData, OrdersShowOrderResponse, OrdersSyncOrdersResponse, OrdersHelloResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, MarketNextCloseDateResponse, MarketIsNextCloseTodayResponse, OrdersListOrdersResponse, OrdersCreateOrderData, OrdersCreateOrderResponse, OrdersSyncOrderData, OrdersSyncOrderResponse, OrdersShowOrderData, OrdersShowOrderResponse, OrdersDeleteOrderData, OrdersDeleteOrderResponse, OrdersSyncOrdersResponse, OrdersHelloResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class ItemsService {
     /**
@@ -213,6 +213,32 @@ export class LoginService {
     }
 }
 
+export class MarketService {
+    /**
+     * Next Close Date
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static nextCloseDate(): CancelablePromise<MarketNextCloseDateResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/market/next_close_date'
+        });
+    }
+    
+    /**
+     * Is Next Close Today
+     * @returns boolean Successful Response
+     * @throws ApiError
+     */
+    public static isNextCloseToday(): CancelablePromise<MarketIsNextCloseTodayResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/market/is_next_close_today'
+        });
+    }
+}
+
 export class OrdersService {
     /**
      * List Orders
@@ -246,6 +272,26 @@ export class OrdersService {
     }
     
     /**
+     * Sync Order
+     * @param data The data for the request.
+     * @param data.id
+     * @returns OrderPublic Successful Response
+     * @throws ApiError
+     */
+    public static syncOrder(data: OrdersSyncOrderData): CancelablePromise<OrdersSyncOrderResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/orders/{id}/sync',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
      * Show Order
      * @param data The data for the request.
      * @param data.id
@@ -255,6 +301,26 @@ export class OrdersService {
     public static showOrder(data: OrdersShowOrderData): CancelablePromise<OrdersShowOrderResponse> {
         return __request(OpenAPI, {
             method: 'GET',
+            url: '/api/v1/orders/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Delete Order
+     * @param data The data for the request.
+     * @param data.id
+     * @returns void Successful Response
+     * @throws ApiError
+     */
+    public static deleteOrder(data: OrdersDeleteOrderData): CancelablePromise<OrdersDeleteOrderResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
             url: '/api/v1/orders/{id}',
             path: {
                 id: data.id

@@ -241,6 +241,29 @@ export const OrderPublicSchema = {
             exclusiveMinimum: 0,
             title: 'Amount'
         },
+        deleted_at: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Deleted At'
+        },
+        deleted_by: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Deleted By'
+        },
         alpaca_buy_order_id: {
             anyOf: [
                 {
