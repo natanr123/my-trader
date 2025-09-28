@@ -59,7 +59,6 @@ class Order(OrderBase, table=True):
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
     owner: User = Relationship(back_populates="orders")
-    # owner: User = Relationship()
 
     def __init__(self, **data):
         super().__init__(**data)
