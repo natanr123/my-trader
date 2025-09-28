@@ -36,7 +36,7 @@ def create_order(
 def list_orders(
     session: SessionDep,
 ) -> list[OrderPublic]:
-    statement = select(Order)
+    statement = select(Order).where(getattr(Order, "deleted_at", None).is_(None))
     results = session.exec(statement)
     orders = results.all()
     return orders
