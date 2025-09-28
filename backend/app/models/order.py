@@ -5,6 +5,7 @@ from sqlmodel import SQLModel, Field, Session
 from transitions import Machine, EventData
 from pydantic import PrivateAttr
 from uuid import UUID
+from app.models.soft_delete_mixin import SoftDeleteMixin
 
 
 class VirtualOrderStatus(str, Enum):
@@ -20,7 +21,7 @@ class OrderCore(SQLModel):
     symbol: str
     amount: float = Field(gt=0)
 
-class OrderBase(OrderCore):
+class OrderBase(SoftDeleteMixin, OrderCore):
     alpaca_buy_order_id: UUID | None = Field(
         default=None,
         index=True,
