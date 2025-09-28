@@ -55,7 +55,10 @@ class OrderBase(SoftDeleteMixin, OrderCore):
 
 class Order(OrderBase, table=True):
     id: Optional[int] = Field(primary_key=True)
-    # owner: User = Relationship(back_populates="orders")
+    owner_id: UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    owner: User = Relationship(back_populates="orders")
     # owner: User = Relationship()
 
     def __init__(self, **data):
