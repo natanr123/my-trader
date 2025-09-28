@@ -70,11 +70,6 @@ class Order(OrderBase, table=True):
         self.machine.buy_submitted()
 
     def buy_accepted(self):
-        print('333333333333333333333333333333333333')
-        m = self.machine
-        print(type(m))
-        print('mmmmmmmmmmmmmmmmmmmmmm:', m)
-
         self.machine.buy_accepted()
 
     def buy_filled(self, filled_avg_price: float, buy_filled_qty: float, market_close_at: datetime):
