@@ -18,9 +18,8 @@ fileConfig(config.config_file_name)
 # target_metadata = None
 
 from app.models.order import Order  # noqa
-from app.models.models import Item, User  # noqa
-
-from app.models.models import SQLModel  # noqa
+from app.models.models import Item  # noqa
+from app.models.user import User, SQLModel  # noqa
 from app.core.config import settings # noqa
 
 target_metadata = SQLModel.metadata
