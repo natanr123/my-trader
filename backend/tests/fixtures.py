@@ -13,6 +13,8 @@ from app.api.deps.deps import get_db
 def create_test_db_engine():
     return create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
 
+
+
 @pytest.fixture(name="session")
 def session_fixture():
     engine = create_test_db_engine()

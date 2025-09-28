@@ -12,6 +12,7 @@ from app.models.user import User
 from tests.utils.user import authentication_token_from_email
 from tests.utils.utils import get_superuser_token_headers
 
+from tests.fixtures import session_fixture, client_fixture, alpaca_client_fixture
 
 
 #
