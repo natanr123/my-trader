@@ -4,11 +4,7 @@ from alpaca.data.requests import StockLatestQuoteRequest
 from alpaca.trading.requests import MarketOrderRequest
 from alpaca.trading.enums import OrderSide, TimeInForce
 from alpaca.trading.models import Order as AlpacaOrder, Position as AlpacaPosition
-from typing import Annotated
-from fastapi import Depends
 from datetime import datetime, timezone
-from decimal import Decimal
-from app.core.config.alpaca_settings import alpaca_settings
 
 
 from alpaca.trading.models import OrderStatus as AlpacaOrderStatus
@@ -119,9 +115,6 @@ class MyAlpacaClient:
         next_close = clock.next_close.astimezone(timezone.utc)
         return next_close.date() == current_time_utc.date()
 
-def get_alpaca_client():
-    print('alpaca_settings.credentialsalpaca_settings.credentialsalpaca_settings.credentials: ', alpaca_settings.credentials)
-    return MyAlpacaClient(alpaca_settings.credentials)
 
 
-AlpacaDep = Annotated[MyAlpacaClient, Depends(get_alpaca_client)]
+

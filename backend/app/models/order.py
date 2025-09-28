@@ -6,7 +6,7 @@ from transitions import Machine, EventData
 from pydantic import PrivateAttr
 from uuid import UUID
 from app.models.soft_delete_mixin import SoftDeleteMixin
-from app.api.deps.my_alpaca_client import AlpacaOrder, MyAlpacaClient, AlpacaOrderStatus
+from app.utils.my_alpaca_client import AlpacaOrder, MyAlpacaClient, AlpacaOrderStatus
 from alpaca.common.exceptions import APIError
 
 class VirtualOrderStatus(str, Enum):
