@@ -4,19 +4,20 @@ from sqlmodel import select
 from app.api.deps import SessionDep
 from app.api.deps.alpaca_dep import AlpacaDep
 from app.models.order import Order, OrderCreate, OrderPublic, VirtualOrderStatus
-
+from app.api.deps import CurrentUser
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 
 @router.post("/", response_model=OrderPublic)
 def create_order(
-    payload: OrderCreate,
+    order_in: OrderCreate, current_user: CurrentUser,
     session: SessionDep,
     alpaca_client: AlpacaDep
 ):
     # my_file_log = MyFileLog('tmp/create_orders.log')
 
-    order = Order(**payload.model_dump())
+    # order =  Order(**order_in.model_dump())
+    order = Order.model_validate(order_in, update={"owner_id": current_user.id})
     # my_file_log.append('Creating new order: ', payload)
     session.add(order)
     session.commit()
