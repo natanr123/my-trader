@@ -41,6 +41,11 @@ def list_orders(
     orders = results.all()
     return orders
 
+@router.post("/{id}/sync")
+def sync_order(id: int, session: SessionDep, alpaca_client: AlpacaDep) -> OrderPublic:
+    order = session.get(Order, id)
+    return order
+
 @router.get("/{id}")
 def show_order(id: int, session: SessionDep) -> OrderPublic:
     order = session.get(Order, id)
