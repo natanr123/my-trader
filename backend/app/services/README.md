@@ -1,0 +1,1 @@
+Business flow, domain logic: example broker-first create, state machine

@@ -5,6 +5,7 @@ from app.api.deps import SessionDep
 from app.api.deps.alpaca_dep import AlpacaDep
 from app.models.order import Order, OrderCreate, OrderPublic, VirtualOrderStatus
 from app.api.deps import CurrentUser
+from app.api.deps.order_service_dep import OrderServiceDep
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 
@@ -12,22 +13,11 @@ router = APIRouter(prefix="/orders", tags=["orders"])
 def create_order(
     order_in: OrderCreate, current_user: CurrentUser,
     session: SessionDep,
-    alpaca_client: AlpacaDep
+    alpaca_client: AlpacaDep,
+    order_service_dep: OrderServiceDep
 ):
     # my_file_log = MyFileLog('tmp/create_orders.log')
-
-    # order =  Order(**order_in.model_dump())
-    order = Order.model_validate(order_in, update={"owner_id": current_user.id})
-    # my_file_log.append('Creating new order: ', payload)
-    session.add(order)
-    session.commit()
-    session.refresh(order)
-    ####################################################
-    alpaca_order = alpaca_client.submit_buy_order(order.symbol, order.amount)
-    order.buy_submitted(alpaca_order_id=alpaca_order.id)
-    ######################################################
-    session.commit()
-    session.refresh(order)
+    order = order_service_dep.create_order_with_alpaca_order(user=current_user, order_in=order_in, session=session, alpaca_client=alpaca_client)
     return order
 
 
