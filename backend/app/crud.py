@@ -4,7 +4,7 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models.models import Item, ItemCreate
+from app.models.item import Item, ItemCreate
 from app.models.user import User, UserCreate, UserUpdate
 
 
