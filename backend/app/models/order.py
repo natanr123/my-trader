@@ -54,7 +54,7 @@ class OrderBase(SoftDeleteMixin, OrderCore):
     _machine: Optional[Machine] = PrivateAttr(default=None)
 
 class Order(OrderBase, table=True):
-    id: Optional[int] = Field(primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
     owner_id: UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
@@ -62,7 +62,8 @@ class Order(OrderBase, table=True):
 
     def __init__(self, **data):
         super().__init__(**data)
-        self._machine = Order.create_machine(self)
+        # Don't create machine here - delay until needed
+        self._machine = None
 
     def buy_submitted(self, alpaca_order_id: UUID):
         self.alpaca_buy_order_id = alpaca_order_id
@@ -172,7 +173,9 @@ class Order(OrderBase, table=True):
 
     @property
     def machine(self) -> Machine:
-        return Order.create_machine(model=self)
+        if self._machine is None:
+            self._machine = Order.create_machine(self)
+        return self._machine
 
 class OrderCreate(OrderCore):
     model_config = {"extra": "forbid"}
