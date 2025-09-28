@@ -4,6 +4,7 @@ from app import crud
 from app.core.config import settings
 from app.models.user import User, UserCreate
 from app.models.order import Order
+from app.models.item import Item
 engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
 
 

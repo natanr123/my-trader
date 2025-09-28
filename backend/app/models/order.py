@@ -70,6 +70,11 @@ class Order(OrderBase, table=True):
         self.machine.buy_submitted()
 
     def buy_accepted(self):
+        print('333333333333333333333333333333333333')
+        m = self.machine
+        print(type(m))
+        print('mmmmmmmmmmmmmmmmmmmmmm:', m)
+
         self.machine.buy_accepted()
 
     def buy_filled(self, filled_avg_price: float, buy_filled_qty: float, market_close_at: datetime):
@@ -173,7 +178,12 @@ class Order(OrderBase, table=True):
 
     @property
     def machine(self) -> Machine:
-        if self._machine is None:
+        # Ensure __pydantic_private__ exists for instances loaded from DB
+        if not hasattr(self, '__pydantic_private__') or self.__pydantic_private__ is None:
+            self.__pydantic_private__ = {}
+
+        # Handle case where _machine doesn't exist (loaded from DB) or is None (new instance)
+        if getattr(self, '_machine', None) is None:
             self._machine = Order.create_machine(self)
         return self._machine
 
