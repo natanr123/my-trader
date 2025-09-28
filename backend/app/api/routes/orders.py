@@ -14,10 +14,9 @@ def create_order(
     order_in: OrderCreate, current_user: CurrentUser,
     session: SessionDep,
     alpaca_client: AlpacaDep,
-    order_service_dep: OrderServiceDep
+    order_service: OrderServiceDep
 ):
-    # my_file_log = MyFileLog('tmp/create_orders.log')
-    order = order_service_dep.create_order_with_alpaca_order(user=current_user, order_in=order_in, session=session, alpaca_client=alpaca_client)
+    order = order_service.create_order_with_alpaca_order(user=current_user, order_in=order_in, session=session, alpaca_client=alpaca_client)
     return order
 
 
@@ -36,12 +35,17 @@ def list_orders(
     "/{id}/sync",
     responses={
         200: {"description": "Order synchronized successfully"},
+        403: {"description": "Not authorized to sync this order"},
         404: {"description": "Order not found"},
         500: {"description": "Internal server error during synchronization"}
     }
 )
-def sync_order(id: int, session: SessionDep, alpaca_client: AlpacaDep) -> OrderPublic:
+def sync_order(id: int, session: SessionDep, alpaca_client: AlpacaDep, current_user: CurrentUser) -> OrderPublic:
     order = session.get(Order, id)
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    if order.owner_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to sync this order")
     order.sync(alpaca_client=alpaca_client)
     session.commit()
     session.refresh(order)
@@ -55,10 +59,12 @@ def show_order(id: int, session: SessionDep) -> OrderPublic:
     return order
 
 @router.delete("/{id}", status_code=204)
-def delete_order(id: int, session: SessionDep):
+def delete_order(id: int, session: SessionDep, current_user: CurrentUser):
     order = session.get(Order, id)
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
+    if order.owner_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to delete this order")
 
     session.delete(order)
     session.commit()
