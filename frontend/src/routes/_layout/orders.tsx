@@ -8,6 +8,7 @@ import {
   Table,
   Text,
   VStack,
+  createToaster,
 } from "@chakra-ui/react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
@@ -20,6 +21,10 @@ import PendingItems from "@/components/Pending/PendingItems"
 
 export const Route = createFileRoute("/_layout/orders")({
   component: Orders,
+})
+
+const toaster = createToaster({
+  placement: "top-end",
 })
 
 function OrdersTable() {
@@ -40,9 +45,22 @@ function OrdersTable() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] })
       setDeletingOrderId(null)
+      toaster.create({
+        title: "Order deleted successfully",
+        status: "success",
+      })
     },
-    onError: () => {
+    onError: (error: any) => {
       setDeletingOrderId(null)
+      const errorMessage = error?.status === 404
+        ? "Order not found."
+        : "Failed to delete order. Please try again."
+
+      toaster.create({
+        title: "Delete failed",
+        description: errorMessage,
+        status: "error",
+      })
     },
   })
 
@@ -54,9 +72,24 @@ function OrdersTable() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] })
       setSyncingOrderId(null)
+      toaster.create({
+        title: "Order synchronized successfully",
+        status: "success",
+      })
     },
-    onError: () => {
+    onError: (error: any) => {
       setSyncingOrderId(null)
+      const errorMessage = error?.status === 500
+        ? "Internal server error during synchronization. Please try again later."
+        : error?.status === 404
+        ? "Order not found."
+        : "Failed to synchronize order. Please try again."
+
+      toaster.create({
+        title: "Sync failed",
+        description: errorMessage,
+        status: "error",
+      })
     },
   })
 
