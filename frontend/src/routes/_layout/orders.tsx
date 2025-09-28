@@ -113,17 +113,32 @@ function OrdersTable() {
     )
   }
 
+  const formatStatusName = (status: string) => {
+    return status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+  }
+
   const getOrderStatusBadge = (order: any) => {
-    if (order.buy_filled_qty && order.sell_filled_qty) {
-      return <Badge colorPalette="green">Completed</Badge>
+    const status = order.status
+    const formattedStatus = formatStatusName(status)
+
+    switch (status) {
+      case "new":
+        return <Badge colorPalette="gray">{formattedStatus}</Badge>
+      case "buy_pending_new":
+        return <Badge colorPalette="yellow">{formattedStatus}</Badge>
+      case "buy_accepted":
+        return <Badge colorPalette="blue">{formattedStatus}</Badge>
+      case "buy_filled":
+        return <Badge colorPalette="cyan">{formattedStatus}</Badge>
+      case "sell_pending_new":
+        return <Badge colorPalette="orange">{formattedStatus}</Badge>
+      case "sell_accepted":
+        return <Badge colorPalette="purple">{formattedStatus}</Badge>
+      case "sell_filled":
+        return <Badge colorPalette="green">{formattedStatus}</Badge>
+      default:
+        return <Badge colorPalette="gray">{formattedStatus}</Badge>
     }
-    if (order.buy_filled_qty && !order.sell_filled_qty) {
-      return <Badge colorPalette="blue">Buy Filled</Badge>
-    }
-    if (order.alpaca_buy_order_id) {
-      return <Badge colorPalette="yellow">Active</Badge>
-    }
-    return <Badge colorPalette="gray">Pending</Badge>
   }
 
   return (

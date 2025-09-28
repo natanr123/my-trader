@@ -99,6 +99,7 @@ def sync_orders(
     print('Total orders: ', total_orders)
     for order in orders:
         order.sync(alpaca_client=alpaca_client)
+        session.commit()
     return {"result": "success"}
 
 
