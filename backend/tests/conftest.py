@@ -14,32 +14,23 @@ from tests.utils.utils import get_superuser_token_headers
 
 
 
-
-@pytest.fixture(name="session")
-def session_fixture():
-    engine = create_test_db_engine()
-    SQLModel.metadata.create_all(engine)
-    with Session(engine) as session:
-        def get_session_override():
-            return session
-        app.dependency_overrides[get_session] = get_session_override
-        yield session
-        app.dependency_overrides.clear()
-
-
-@pytest.fixture(scope="module")
-def client() -> Generator[TestClient, None, None]:
-    with TestClient(app) as c:
-        yield c
-
-
-@pytest.fixture(scope="module")
-def superuser_token_headers(client: TestClient) -> dict[str, str]:
-    return get_superuser_token_headers(client)
+#
+# @pytest.fixture(name="session")
+# def session_fixture():
+#     engine = create_test_db_engine()
+#     SQLModel.metadata.create_all(engine)
+#     with Session(engine) as session:
+#         def get_session_override():
+#             return session
+#         app.dependency_overrides[get_session] = get_session_override
+#         yield session
+#         app.dependency_overrides.clear()
+#
+#
+# @pytest.fixture(scope="module")
+# def client() -> Generator[TestClient, None, None]:
+#     with TestClient(app) as c:
+#         yield c
+#
 
 
-@pytest.fixture(scope="module")
-def normal_user_token_headers(client: TestClient, db: Session) -> dict[str, str]:
-    return authentication_token_from_email(
-        client=client, email=settings.EMAIL_TEST_USER, db=db
-    )
