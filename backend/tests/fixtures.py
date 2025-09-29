@@ -14,29 +14,27 @@ from app.api.deps.deps import get_db
 def create_test_db_engine():
     return create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
 
-@pytest.fixture(name="db")
-def db_fixture():
-    engine = create_test_db_engine()
-    SQLModel.metadata.create_all(engine)
-    with Session(engine) as session:
-        yield session
-
 @pytest.fixture(name="session")
 def session_fixture():
+    from app.core.db import init_db
     engine = create_test_db_engine()
     SQLModel.metadata.create_all(engine)
     with Session(engine) as session:
-        def get_session_override():
-            return session
-        app.dependency_overrides[get_db] = get_session_override
+        init_db(session)
         yield session
-        app.dependency_overrides.clear()
 
+@pytest.fixture(name="db")
+def db_fixture(session):
+    return session
 
 @pytest.fixture(name="client")
 def client_fixture(session: Session):
+    def get_session_override():
+        return session
+    app.dependency_overrides[get_db] = get_session_override
     client = TestClient(app)
     yield client
+    app.dependency_overrides.clear()
 
 @pytest.fixture(name="alpaca_client")
 def alpaca_client_fixture():
