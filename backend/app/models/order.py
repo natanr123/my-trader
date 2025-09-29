@@ -90,7 +90,7 @@ class Order(OrderBase, table=True):
 
     def sell_filled(self, filled_avg_price: float, filled_qty: float):
         if self.status == VirtualOrderStatus.SELL_PENDING_NEW:
-            self.buy_accepted()
+            self.sell_accepted()
         self.sell_filled_avg_price = filled_avg_price
         self.sell_filled_qty = filled_qty
         self.machine.sell_filled()
