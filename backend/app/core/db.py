@@ -1,6 +1,6 @@
 from sqlmodel import Session, create_engine, select
 
-from app import crud
+from app.crud import crud
 from app.core.config import settings
 from app.models.user import User, UserCreate
 from app.models.order import Order

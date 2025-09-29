@@ -1,2 +1,2 @@
-# Re-export from the main crud.py file in parent directory
-from app.crud import *
+# Import and re-export from crud files in this directory
+from .crud import *

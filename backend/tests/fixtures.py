@@ -14,8 +14,6 @@ from app.api.deps.deps import get_db
 from collections.abc import Generator
 from app.api.deps.alpaca_dep import get_alpaca_client_test
 
-from app.api.deps.order_service_dep import get_order_service
-from app.services.order_service import OrderService
 
 
 def create_test_db_engine():
@@ -49,10 +47,6 @@ def alpaca_client_fixture() -> Generator[MyAlpacaClient, None, None]:
         return get_alpaca_client_test()
     alpaca_client = get_override()
     yield alpaca_client
-
-@pytest.fixture(name="order_service")
-def order_service_fixture() -> Generator[OrderService, None, None]:
-    yield get_order_service()
 
 @pytest.fixture(name="superuser_token_headers")
 def superuser_token_headers(client: TestClient) -> dict[str, str]:

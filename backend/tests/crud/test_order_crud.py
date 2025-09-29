@@ -1,11 +1,11 @@
 from app.clients.my_alpaca_client import MyAlpacaClient, AlpacaOrder, AlpacaOrderStatus
 from sqlmodel import Session
-from app.services.order_service import OrderService, OrderSyncData
-from app.models.order import OrderCreate, OrderPublic, Order, VirtualOrderStatus
+from app.crud.order_crud import OrderCrud, OrderSyncData
+from app.models.order import Order, VirtualOrderStatus
 from uuid import UUID
 from datetime import datetime
 
-def test_handle_buy_pending_new(alpaca_client: MyAlpacaClient, order_service: OrderService, db: Session) -> None:
+def test_handle_buy_pending_new(alpaca_client: MyAlpacaClient, db: Session) -> None:
     order = Order(status=VirtualOrderStatus.BUY_PENDING_NEW)
     buy_order = AlpacaOrder(id=UUID('cbe2c370-f613-41d0-9833-248f1ade5d6d'),
                             client_order_id="",
@@ -18,6 +18,6 @@ def test_handle_buy_pending_new(alpaca_client: MyAlpacaClient, order_service: Or
                             )
     sync_data = OrderSyncData(buy_order=buy_order, sell_order=None)
 
-    order_service._handle_buy_pending_new(order=order, sync_data=sync_data, alpaca_client=alpaca_client)
+    OrderCrud._handle_buy_pending_new(order=order, sync_data=sync_data, alpaca_client=alpaca_client)
     assert order.status == VirtualOrderStatus.BUY_ACCEPTED
 
