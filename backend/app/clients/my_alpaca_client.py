@@ -5,7 +5,7 @@ from alpaca.trading.requests import MarketOrderRequest
 from alpaca.trading.enums import OrderSide, TimeInForce
 from alpaca.trading.models import Order as AlpacaOrder, Position as AlpacaPosition
 from datetime import datetime, timezone
-
+from uuid import UUID
 
 from alpaca.trading.models import OrderStatus as AlpacaOrderStatus
 
@@ -63,7 +63,7 @@ class MyAlpacaClient:
         alpaca_order = self.trading_client.close_position(symbol)
         return alpaca_order
     
-    def get_order_by_id(self, order_id: str) -> AlpacaOrder:
+    def get_order_by_id(self, order_id: UUID) -> AlpacaOrder:
         """Get order by ID with automatic type conversion for numeric fields"""
         alpaca_order = self.trading_client.get_order_by_id(order_id)
         

@@ -7,7 +7,6 @@ from app.models.user import User
 from app.models.order import VirtualOrderStatus
 from alpaca.common.exceptions import APIError
 
-
 class OrderService:
     def create_order_with_alpaca_order(self, user: User, order_in: OrderCreate, session: Session, alpaca_client: MyAlpacaClient) -> Order:
         alpaca_order = alpaca_client.submit_buy_order(order_in.symbol, order_in.amount)
