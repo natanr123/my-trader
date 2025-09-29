@@ -1,3 +1,4 @@
+import uuid
 from fastapi.testclient import TestClient
 from sqlmodel import Session, select
 
@@ -19,7 +20,7 @@ def test_create_user(client: TestClient, db: Session) -> None:
 
     data = r.json()
 
-    user = db.exec(select(User).where(User.id == data["id"])).first()
+    user = db.exec(select(User).where(User.id == uuid.UUID(data["id"]))).first()
 
     assert user
     assert user.email == "pollo@listo.com"
