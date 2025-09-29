@@ -33,10 +33,7 @@ class OrderService:
             order.buy_accepted()
         elif sync_data.buy_order.status == AlpacaOrderStatus.FILLED:
             print('the order id=', order.id, 'moving from buying to filled')
-
             market_close_at = alpaca_client.get_next_close()
-
-
             order.buy_filled(filled_avg_price=sync_data.buy_order.filled_avg_price,
                            buy_filled_qty=sync_data.buy_order.filled_qty, market_close_at=market_close_at)
 
@@ -49,35 +46,26 @@ class OrderService:
             order.buy_filled(filled_avg_price=sync_data.buy_order.filled_avg_price,
                            buy_filled_qty=sync_data.buy_order.filled_qty, market_close_at=market_close_at)
 
-    def _handle_buy_filled(self, order: Order, alpaca_client: MyAlpacaClient):
+    def _handle_sell_pending_new(self, order: Order, sync_data: OrderSyncData):
+        if sync_data.sell_order and sync_data.sell_order.status == AlpacaOrderStatus.ACCEPTED:
+            order.sell_accepted()
+        elif sync_data.sell_order and sync_data.sell_order.status == AlpacaOrderStatus.FILLED:
+            order.sell_filled(filled_avg_price=sync_data.buy_order.filled_avg_price,
+                            filled_qty=sync_data.buy_order.filled_qty)
+
+    def apply_sell_rules(self, order: Order, alpaca_client: MyAlpacaClient):
+        if order.status != VirtualOrderStatus.BUY_FILLED:
+            raise APIError('Order status is not BUY_FILLED and try to apply sell rules')
+
         sell_time_passed = alpaca_client.is_time_passed(order.force_sell_at)
         if sell_time_passed:
             try:
                 alpaca_sell_order = alpaca_client.close_position(order.symbol)
                 order.sell_submitted(alpaca_order_id=alpaca_sell_order.id)
             except APIError:
-                order.sell_submitted(alpaca_order_id=None)
-                order.sell_accepted()
-                order.sell_filled(filled_avg_price=0, filled_qty=0)
+                order.sell_failed()
         else:
             print('the order id=', order.id, 'was buy filled', 'but it is not time-passed', 'doing nothing')
-
-    def _handle_sell_pending_new(self, order: Order, sync_data: OrderSyncData):
-        if sync_data.sell_order and sync_data.sell_order.status == AlpacaOrderStatus.ACCEPTED:
-            order.sell_accepted()
-        elif sync_data.sell_order and sync_data.sell_order.status == AlpacaOrderStatus.FILLED:
-            order.sell_accepted()
-            order.sell_filled(filled_avg_price=sync_data.buy_order.filled_avg_price,
-                            filled_qty=sync_data.buy_order.filled_qty)
-
-    def create_order_with_alpaca_order(self, user: User, order_in: OrderCreate, session: Session, alpaca_client: MyAlpacaClient) -> Order:
-        alpaca_order = alpaca_client.submit_buy_order(order_in.symbol, order_in.amount)
-        order = Order.model_validate(order_in, update={"owner_id": user.id})
-        order.buy_submitted(alpaca_order_id=alpaca_order.id)
-        session.add(order)
-        session.commit()
-        session.refresh(order)
-        return order
 
     def sync_order(self, order: Order, alpaca_client: MyAlpacaClient):
         sync_data = self._fetch_order_data(order, alpaca_client)
@@ -89,7 +77,16 @@ class OrderService:
                 self._handle_buy_pending_new(order, sync_data, alpaca_client)
             case VirtualOrderStatus.BUY_ACCEPTED:
                 self._handle_buy_accepted(order, sync_data, alpaca_client)
-            case VirtualOrderStatus.BUY_FILLED:
-                self._handle_buy_filled(order, alpaca_client)
             case VirtualOrderStatus.SELL_PENDING_NEW:
                 self._handle_sell_pending_new(order, sync_data)
+            case VirtualOrderStatus.BUY_FILLED:
+                self.apply_sell_rules(order, alpaca_client)
+
+    def create_order_with_alpaca_order(self, user: User, order_in: OrderCreate, session: Session, alpaca_client: MyAlpacaClient) -> Order:
+        alpaca_order = alpaca_client.submit_buy_order(order_in.symbol, order_in.amount)
+        order = Order.model_validate(order_in, update={"owner_id": user.id})
+        order.buy_submitted(alpaca_order_id=alpaca_order.id)
+        session.add(order)
+        session.commit()
+        session.refresh(order)
+        return order

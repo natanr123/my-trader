@@ -16,6 +16,7 @@ class VirtualOrderStatus(str, Enum):
     SELL_PENDING_NEW = "sell_pending_new"
     SELL_ACCEPTED = "sell_accepted"
     SELL_FILLED = "sell_filled"
+    SELL_FAILED = "sell_failed"
 
 class OrderCore(SQLModel):
     symbol: str
@@ -71,7 +72,7 @@ class Order(OrderBase, table=True):
         self.machine.buy_accepted()
 
     def buy_filled(self, filled_avg_price: float, buy_filled_qty: float, market_close_at: datetime):
-        if self.status == VirtualOrderStatus.SELL_PENDING_NEW:
+        if self.status == VirtualOrderStatus.BUY_PENDING_NEW:
             self.buy_accepted()
         self.buy_filled_avg_price = filled_avg_price
         self.buy_filled_qty = buy_filled_qty
@@ -88,9 +89,15 @@ class Order(OrderBase, table=True):
         self.machine.sell_accepted()
 
     def sell_filled(self, filled_avg_price: float, filled_qty: float):
+        if self.status == VirtualOrderStatus.SELL_PENDING_NEW:
+            self.buy_accepted()
         self.sell_filled_avg_price = filled_avg_price
         self.sell_filled_qty = filled_qty
         self.machine.sell_filled()
+
+    def sell_failed(self):
+        self.machine.sell_failed()
+
 
 
     @staticmethod
@@ -109,6 +116,7 @@ class Order(OrderBase, table=True):
             {"trigger": "buy_accepted", "source": VirtualOrderStatus.BUY_PENDING_NEW, "dest": VirtualOrderStatus.BUY_ACCEPTED},
             {"trigger": "buy_filled", "source": VirtualOrderStatus.BUY_ACCEPTED, "dest": VirtualOrderStatus.BUY_FILLED},
             {"trigger": "sell_submitted", "source": VirtualOrderStatus.BUY_FILLED, "dest": VirtualOrderStatus.SELL_PENDING_NEW},
+            {"trigger": "sell_failed", "source": VirtualOrderStatus.BUY_FILLED, "dest": VirtualOrderStatus.SELL_FAILED},
             {"trigger": "sell_accepted", "source": VirtualOrderStatus.SELL_PENDING_NEW, "dest": VirtualOrderStatus.SELL_ACCEPTED},
             {"trigger": "sell_filled", "source": VirtualOrderStatus.SELL_ACCEPTED, "dest": VirtualOrderStatus.SELL_FILLED},
         ]
