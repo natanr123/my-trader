@@ -751,6 +751,6 @@ export const ValidationErrorSchema = {
 
 export const VirtualOrderStatusSchema = {
     type: 'string',
-    enum: ['new', 'buy_pending_new', 'buy_accepted', 'buy_filled', 'sell_pending_new', 'sell_accepted', 'sell_filled'],
+    enum: ['new', 'buy_pending_new', 'buy_accepted', 'buy_filled', 'sell_pending_new', 'sell_accepted', 'sell_filled', 'sell_failed'],
     title: 'VirtualOrderStatus'
 } as const;

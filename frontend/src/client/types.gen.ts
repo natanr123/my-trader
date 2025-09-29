@@ -136,7 +136,7 @@ export type ValidationError = {
     type: string;
 };
 
-export type VirtualOrderStatus = 'new' | 'buy_pending_new' | 'buy_accepted' | 'buy_filled' | 'sell_pending_new' | 'sell_accepted' | 'sell_filled';
+export type VirtualOrderStatus = 'new' | 'buy_pending_new' | 'buy_accepted' | 'buy_filled' | 'sell_pending_new' | 'sell_accepted' | 'sell_filled' | 'sell_failed';
 
 export type ItemsReadItemsData = {
     limit?: number;
@@ -208,6 +208,12 @@ export type OrdersCreateOrderData = {
 
 export type OrdersCreateOrderResponse = (OrderPublic);
 
+export type OrdersCreateOrderByAdminData = {
+    requestBody: OrderCreate;
+};
+
+export type OrdersCreateOrderByAdminResponse = (OrderPublic);
+
 export type OrdersSyncOrderData = {
     id: number;
 };
@@ -227,8 +233,6 @@ export type OrdersDeleteOrderData = {
 export type OrdersDeleteOrderResponse = (void);
 
 export type OrdersSyncOrdersResponse = (unknown);
-
-export type OrdersHelloResponse = (unknown);
 
 export type PrivateCreateUserData = {
     requestBody: PrivateUserCreate;
