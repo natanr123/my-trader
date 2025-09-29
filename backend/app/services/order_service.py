@@ -54,20 +54,18 @@ class OrderService:
                             filled_qty=sync_data.buy_order.filled_qty)
 
     def apply_sell_rules(self, order: Order, alpaca_client: MyAlpacaClient):
-        if order.status != VirtualOrderStatus.BUY_FILLED:
-            raise APIError('Order status is not BUY_FILLED and try to apply sell rules')
+        if order.status == VirtualOrderStatus.BUY_FILLED:
+            sell_time_passed = alpaca_client.is_time_passed(order.force_sell_at)
+            if sell_time_passed:
+                try:
+                    alpaca_sell_order = alpaca_client.close_position(order.symbol)
+                    order.sell_submitted(alpaca_order_id=alpaca_sell_order.id)
+                except APIError:
+                    order.sell_failed()
+            else:
+                print('the order id=', order.id, 'was buy filled', 'but it is not time-passed', 'doing nothing')
 
-        sell_time_passed = alpaca_client.is_time_passed(order.force_sell_at)
-        if sell_time_passed:
-            try:
-                alpaca_sell_order = alpaca_client.close_position(order.symbol)
-                order.sell_submitted(alpaca_order_id=alpaca_sell_order.id)
-            except APIError:
-                order.sell_failed()
-        else:
-            print('the order id=', order.id, 'was buy filled', 'but it is not time-passed', 'doing nothing')
-
-    def sync_order(self, order: Order, alpaca_client: MyAlpacaClient):
+    def sync_order_status(self, order: Order, alpaca_client: MyAlpacaClient):
         sync_data = self._fetch_order_data(order, alpaca_client)
         _log_order_status(order, sync_data)
 
@@ -79,8 +77,8 @@ class OrderService:
                 self._handle_buy_accepted(order, sync_data, alpaca_client)
             case VirtualOrderStatus.SELL_PENDING_NEW:
                 self._handle_sell_pending_new(order, sync_data)
-            case VirtualOrderStatus.BUY_FILLED:
-                self.apply_sell_rules(order, alpaca_client)
+
+
 
     def create_order_with_alpaca_order(self, user: User, order_in: OrderCreate, session: Session, alpaca_client: MyAlpacaClient) -> Order:
         alpaca_order = alpaca_client.submit_buy_order(order_in.symbol, order_in.amount)

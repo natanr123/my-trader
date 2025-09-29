@@ -61,7 +61,7 @@ def sync_order(id: int, session: SessionDep, alpaca_client: AlpacaDep, current_u
         raise HTTPException(status_code=404, detail="Order not found")
     if order.owner_id != current_user.id:
         raise HTTPException(status_code=403, detail="Not authorized to sync this order")
-    order_service.sync_order(order=order, alpaca_client=alpaca_client)
+    order_service.sync_order_status(order=order, alpaca_client=alpaca_client)
     session.commit()
     session.refresh(order)
     return order
@@ -99,7 +99,7 @@ def sync_orders(
 
     print('Total orders: ', total_orders)
     for order in orders:
-        order_service.sync_order(order=order, alpaca_client=alpaca_client)
+        order_service.sync_order_status(order=order, alpaca_client=alpaca_client)
         session.commit()
     return {"result": "success"}
 
