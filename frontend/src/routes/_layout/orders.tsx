@@ -136,6 +136,8 @@ function OrdersTable() {
         return <Badge colorPalette="purple">{formattedStatus}</Badge>
       case "sell_filled":
         return <Badge colorPalette="green">{formattedStatus}</Badge>
+      case "sell_failed":
+        return <Badge colorPalette="red">{formattedStatus}</Badge>
       default:
         return <Badge colorPalette="gray">{formattedStatus}</Badge>
     }
