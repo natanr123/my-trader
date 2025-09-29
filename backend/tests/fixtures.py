@@ -38,10 +38,10 @@ def client_fixture(session: Session):
 
 @pytest.fixture(name="alpaca_client")
 def alpaca_client_fixture():
-    app.dependency_overrides[get_alpaca_client] = get_alpaca_client
-    alpaca_client = get_alpaca_client()
+    def get_override():
+        return get_alpaca_client()
+    alpaca_client = get_override()
     yield alpaca_client
-    app.dependency_overrides.clear()
 
 @pytest.fixture(name="superuser_token_headers")
 def superuser_token_headers(client: TestClient) -> dict[str, str]:

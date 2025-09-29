@@ -37,4 +37,4 @@ class AlpacaSettings(BaseSettings):
         }
 
 
-alpaca_settings = AlpacaSettings()  # type: ignore
+alpaca_settings = AlpacaSettings()
