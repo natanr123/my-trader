@@ -64,6 +64,10 @@ def sync_order(id: int, session: SessionDep, alpaca_client: AlpacaDep, current_u
     order_service.sync_order_status(order=order, alpaca_client=alpaca_client)
     session.commit()
     session.refresh(order)
+    order_service.apply_sell_rules(order=order, alpaca_client=alpaca_client)
+    session.commit()
+    session.refresh(order)
+
     return order
 
 @router.get("/{id}")
@@ -101,6 +105,10 @@ def sync_orders(
     for order in orders:
         order_service.sync_order_status(order=order, alpaca_client=alpaca_client)
         session.commit()
+        session.refresh(order)
+        order_service.apply_sell_rules(order=order, alpaca_client=alpaca_client)
+        session.commit()
+        session.refresh(order)
     return {"result": "success"}
 
 
