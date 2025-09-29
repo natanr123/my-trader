@@ -71,6 +71,8 @@ class Order(OrderBase, table=True):
         self.machine.buy_accepted()
 
     def buy_filled(self, filled_avg_price: float, buy_filled_qty: float, market_close_at: datetime):
+        if self.status == VirtualOrderStatus.SELL_PENDING_NEW:
+            self.buy_accepted()
         self.buy_filled_avg_price = filled_avg_price
         self.buy_filled_qty = buy_filled_qty
         self.force_sell_at = market_close_at - timedelta(minutes=30)

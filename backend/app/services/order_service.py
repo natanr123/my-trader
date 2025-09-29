@@ -32,9 +32,11 @@ class OrderService:
         if sync_data.buy_order.status == AlpacaOrderStatus.ACCEPTED:
             order.buy_accepted()
         elif sync_data.buy_order.status == AlpacaOrderStatus.FILLED:
-            order.buy_accepted()
             print('the order id=', order.id, 'moving from buying to filled')
+
             market_close_at = alpaca_client.get_next_close()
+
+
             order.buy_filled(filled_avg_price=sync_data.buy_order.filled_avg_price,
                            buy_filled_qty=sync_data.buy_order.filled_qty, market_close_at=market_close_at)
 
