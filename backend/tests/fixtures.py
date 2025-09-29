@@ -4,7 +4,7 @@ from sqlmodel.pool import StaticPool
 
 from fastapi.testclient import TestClient
 from app.main import app
-from app.api.deps.alpaca_dep import get_alpaca_client
+from app.api.deps.alpaca_dep import get_alpaca_client_test
 from tests.utils.user import authentication_token_from_email
 from tests.utils.utils import get_superuser_token_headers
 from app.core.config import settings
@@ -39,7 +39,7 @@ def client_fixture(session: Session):
 @pytest.fixture(name="alpaca_client")
 def alpaca_client_fixture():
     def get_override():
-        return get_alpaca_client()
+        return get_alpaca_client_test()
     alpaca_client = get_override()
     yield alpaca_client
 
