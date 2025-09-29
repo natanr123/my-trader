@@ -1,7 +1,7 @@
 from app.clients.my_alpaca_client import MyAlpacaClient
 from sqlmodel import Session
 from app.services.order_service import OrderService
-from app.models.order import OrderCreate
+from app.models.order import OrderCreate, OrderPublic, Order, VirtualOrderStatus
 from app.models.user import UserCreate, User
 from app.crud import create_user
 
@@ -13,7 +13,9 @@ def test_handle_buy_pending_new(alpaca_client: MyAlpacaClient, order_service: Or
     user_create = UserCreate(email='aaaa@aaa.com', password='12345678')
     user = create_user(session=db, user_create=user_create)
     order_in = OrderCreate(symbol='AAPL', amount=100)
-    order_service.create_order_with_alpaca_order(user=user, order_in=order_in, session=db, alpaca_client=alpaca_client)
+    # order_service.create_order_with_alpaca_order(user=user, order_in=order_in, session=db, alpaca_client=alpaca_client)
+    order = Order(status=VirtualOrderStatus.BUY_PENDING_NEW)
+    # order_service._handle_buy_pending_new()
 
 
     # db_obj = User.model_validate(
