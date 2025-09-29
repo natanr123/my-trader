@@ -50,8 +50,8 @@ class OrderService:
         if sync_data.sell_order and sync_data.sell_order.status == AlpacaOrderStatus.ACCEPTED:
             order.sell_accepted()
         elif sync_data.sell_order and sync_data.sell_order.status == AlpacaOrderStatus.FILLED:
-            order.sell_filled(filled_avg_price=sync_data.buy_order.filled_avg_price,
-                            filled_qty=sync_data.buy_order.filled_qty)
+            order.sell_filled(filled_avg_price=sync_data.sell_order.filled_avg_price,
+                            filled_qty=sync_data.sell_order.filled_qty)
 
     def apply_sell_rules(self, order: Order, alpaca_client: MyAlpacaClient):
         if order.status == VirtualOrderStatus.BUY_FILLED:
