@@ -8,7 +8,7 @@ def get_alpaca_client():
 
 # We do not want any outside calls in test
 def get_alpaca_client_test():
-    test_settings = AlpacaSettings(ALPACA_API_KEY='', ALPACA_SECRET_KEY='', ALPACA_NAME='test', ALPACA_PAPER=True)
+    test_settings = AlpacaSettings(ALPACA_API_KEY='NOTREAL6A5W029JXQH4D', ALPACA_SECRET_KEY='NOTREALt5wcgRbktip0fLx4vTneRoBoeOJCjBuLI', ALPACA_NAME='test', ALPACA_PAPER=True)
     return MyAlpacaClient(test_settings.credentials)
 
 AlpacaDep = Annotated[MyAlpacaClient, Depends(get_alpaca_client)]
