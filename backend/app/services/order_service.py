@@ -13,9 +13,6 @@ class OrderSyncData:
     buy_order: AlpacaOrder
     sell_order: AlpacaOrder | None
 
-def _log_order_status(order: Order, sync_data: OrderSyncData):
-    print('working on order id=', order.id, 'status=', order.status, 'alpaca_status=', sync_data.buy_order.status, 'alpaca_sell_order=', bool(sync_data.sell_order))
-
 class OrderService:
     def _fetch_order_data(self, order: Order, alpaca_client: MyAlpacaClient) -> OrderSyncData:
         if not order.alpaca_buy_order_id:
@@ -57,6 +54,7 @@ class OrderService:
                             filled_qty=sync_data.sell_order.filled_qty)
 
     def apply_sell_rules(self, order: Order, alpaca_client: MyAlpacaClient):
+        print('apply_sell_rules order id=', order.id, 'status=', order.status)
         if order.status == VirtualOrderStatus.BUY_FILLED:
             sell_time_passed = alpaca_client.is_time_passed(order.force_sell_at)
             if sell_time_passed:
@@ -70,7 +68,8 @@ class OrderService:
 
     def sync_order_status(self, order: Order, alpaca_client: MyAlpacaClient):
         sync_data = self._fetch_order_data(order, alpaca_client)
-        _log_order_status(order, sync_data)
+        print('working on order id=', order.id, 'status=', order.status, 'alpaca_status=', sync_data.buy_order.status,
+              'alpaca_sell_order=', bool(sync_data.sell_order), 'user_email=', order.owner.email)
 
         # NEW -> BUY_PENDING_NEW -> BUY_ACCEPTED -> BUY_FILLED -> SELL_PENDING_NEW -> SELL_ACCEPTED -> SELL_FILLED
         match order.status:

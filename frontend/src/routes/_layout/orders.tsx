@@ -147,6 +147,7 @@ function OrdersTable() {
     <Table.Root size={{ base: "sm", md: "md" }}>
       <Table.Header>
         <Table.Row>
+          <Table.ColumnHeader>ID</Table.ColumnHeader>
           <Table.ColumnHeader>Symbol</Table.ColumnHeader>
           <Table.ColumnHeader>Amount ($)</Table.ColumnHeader>
           <Table.ColumnHeader>Quantity</Table.ColumnHeader>
@@ -160,6 +161,11 @@ function OrdersTable() {
       <Table.Body>
         {orders?.map((order) => (
           <Table.Row key={order.id}>
+            <Table.Cell>
+              <Text fontSize="sm" color="gray.500">
+                #{order.id}
+              </Text>
+            </Table.Cell>
             <Table.Cell>
               <Text fontWeight="bold" color="blue.500">
                 {order.symbol}
