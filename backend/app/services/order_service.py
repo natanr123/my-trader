@@ -47,9 +47,12 @@ class OrderService:
                            buy_filled_qty=sync_data.buy_order.filled_qty, market_close_at=market_close_at)
 
     def _handle_sell_pending_new(self, order: Order, sync_data: OrderSyncData):
-        if sync_data.sell_order and sync_data.sell_order.status == AlpacaOrderStatus.ACCEPTED:
+        if not sync_data.sell_order:
+            raise Exception('Order in sell_pending_new but no matching alpaca sell order')
+
+        if sync_data.sell_order.status == AlpacaOrderStatus.ACCEPTED:
             order.sell_accepted()
-        elif sync_data.sell_order and sync_data.sell_order.status == AlpacaOrderStatus.FILLED:
+        elif sync_data.sell_order.status == AlpacaOrderStatus.FILLED:
             order.sell_filled(filled_avg_price=sync_data.sell_order.filled_avg_price,
                             filled_qty=sync_data.sell_order.filled_qty)
 
