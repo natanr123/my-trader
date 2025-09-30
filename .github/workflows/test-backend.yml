@@ -34,7 +34,7 @@ jobs:
       - name: Run tests
         run: uv run bash scripts/tests-start.sh "Coverage for ${{ github.sha }}"
         working-directory: backend
-      - run: docker compose --env-file test.env down -v --remove-orphans
+      - run: docker compose down -v --remove-orphans
       - name: Store coverage files
         uses: actions/upload-artifact@v4
         with:
