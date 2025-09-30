@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 
 from alpaca.common.exceptions import APIError
@@ -6,6 +7,8 @@ from sqlmodel import Session
 from app.clients.my_alpaca_client import AlpacaOrder, AlpacaOrderStatus, MyAlpacaClient
 from app.models.order import Order, OrderCreate, VirtualOrderStatus
 from app.models.user import User
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -49,7 +52,7 @@ class OrderCrud:
         if sync_data.buy_order.status == AlpacaOrderStatus.ACCEPTED:
             order.buy_accepted()
         elif sync_data.buy_order.status == AlpacaOrderStatus.FILLED:
-            print('the order id=', order.id, 'moving from buying to filled')
+            logger.info('Order id=%s moving from buying to filled', order.id)
             market_close_at = alpaca_client.get_next_close()
             order.buy_filled(filled_avg_price=sync_data.get_buy_order_filled_avg_price(),
                            buy_filled_qty=sync_data.get_buy_order_filled_qty(), market_close_at=market_close_at)
@@ -57,9 +60,9 @@ class OrderCrud:
     @classmethod
     def _handle_buy_accepted(cls, order: Order, sync_data: OrderSyncData, alpaca_client: MyAlpacaClient):
         if sync_data.buy_order.status == AlpacaOrderStatus.ACCEPTED:
-            print('the order id=', order.id, 'waiting for it to be filled. Nothing to do for now')
+            logger.info('Order id=%s waiting for it to be filled. Nothing to do for now', order.id)
         elif sync_data.buy_order.status == AlpacaOrderStatus.FILLED:
-            print('the order id=', order.id, 'is moving from buying accepted buying to filled')
+            logger.info('Order id=%s is moving from buying accepted buying to filled', order.id)
             market_close_at = alpaca_client.get_next_close()
             order.buy_filled(filled_avg_price=sync_data.get_buy_order_filled_avg_price(),
                            buy_filled_qty=sync_data.get_buy_order_filled_qty(), market_close_at=market_close_at)
@@ -77,7 +80,7 @@ class OrderCrud:
 
     @classmethod
     def apply_sell_rules(cls, order: Order, alpaca_client: MyAlpacaClient):
-        print('apply_sell_rules order id=', order.id, 'status=', order.status)
+        logger.info('apply_sell_rules order id=%s status=%s', order.id, order.status)
         if order.status == VirtualOrderStatus.BUY_FILLED:
             assert order.force_sell_at is not None
             sell_time_passed = alpaca_client.is_time_passed(order.force_sell_at)
@@ -88,13 +91,13 @@ class OrderCrud:
                 except APIError:
                     order.sell_failed()
             else:
-                print('the order id=', order.id, 'was buy filled', 'but it is not time-passed', 'doing nothing')
+                logger.info('Order id=%s was buy filled but it is not time-passed, doing nothing', order.id)
 
     @classmethod
     def sync_order_status(cls, order: Order, alpaca_client: MyAlpacaClient):
         sync_data = cls._fetch_order_data(order, alpaca_client)
-        print('working on order id=', order.id, 'status=', order.status, 'alpaca_status=', sync_data.buy_order.status,
-              'alpaca_sell_order=', bool(sync_data.sell_order), 'user_email=', order.owner.email)
+        logger.info('Working on order id=%s status=%s alpaca_status=%s alpaca_sell_order=%s user_email=%s',
+                    order.id, order.status, sync_data.buy_order.status, bool(sync_data.sell_order), order.owner.email)
 
         # NEW -> BUY_PENDING_NEW -> BUY_ACCEPTED -> BUY_FILLED -> SELL_PENDING_NEW -> SELL_ACCEPTED -> SELL_FILLED
         match order.status:

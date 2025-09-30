@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, HTTPException
 from sqlmodel import select
 
@@ -5,6 +7,8 @@ from app.api.deps import CurrentUser, SessionDep
 from app.api.deps.alpaca_dep import AlpacaDep
 from app.crud.order_crud import OrderCrud
 from app.models.order import Order, OrderCreate, OrderPublic
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 
@@ -95,13 +99,13 @@ def sync_orders(
 ):
     # my_file_log = MyFileLog('tmp/syncs.log')
 
-    print('Syncing orders ......................................')
+    logger.info('Syncing orders')
     statement = select(Order)
     results = session.exec(statement)
     orders = results.all()
     total_orders = len(orders)
 
-    print('Total orders: ', total_orders)
+    logger.info('Total orders: %d', total_orders)
     for order in orders:
         OrderCrud.sync_order_status(order=order, alpaca_client=alpaca_client)
         session.commit()

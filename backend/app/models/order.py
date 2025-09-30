@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timedelta, timezone
 from enum import Enum
 from typing import Any
@@ -8,6 +9,8 @@ from sqlmodel import Field, Relationship, SQLModel
 from transitions import EventData, Machine
 
 from app.models.user import User
+
+logger = logging.getLogger(__name__)
 
 
 class VirtualOrderStatus(str, Enum):
@@ -110,7 +113,7 @@ class Order(OrderBase, table=True):
         class MyMachine(Machine):
             def after_state_changed(self, event: EventData) -> None:
                 self._model.status = VirtualOrderStatus(event.state.value)
-                print('model status was updated to ',event.state.name)
+                logger.info('Model status was updated to %s', event.state.name)
 
             def set_model(self, model: "Order") -> None:
                 self._model = model
