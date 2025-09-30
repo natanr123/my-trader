@@ -102,14 +102,14 @@ class Order(OrderBase, table=True):
 
 
     @staticmethod
-    def create_machine(model) -> Machine:
+    def create_machine(model: "Order") -> Machine:
 
         class MyMachine(Machine):
-            def after_state_changed(self, event: EventData):
-                self._model.status = event.state.value
+            def after_state_changed(self, event: EventData) -> None:
+                self._model.status = VirtualOrderStatus(event.state.value)
                 print('model status was updated to ',event.state.name)
 
-            def set_model(self, model):
+            def set_model(self, model: "Order") -> None:
                 self._model = model
 
         transitions_def = [
