@@ -24,7 +24,7 @@ def create_order_by_admin(
     alpaca_client: AlpacaDep,
 ):
     from app.models.user import User
-    admin = session.exec(select(User).where(User.is_superuser == True)).first()
+    admin = session.exec(select(User).where(User.is_superuser)).first()
     if not admin:
         raise HTTPException(status_code=404, detail="No admin user found")
     order = OrderCrud.create_order_with_alpaca_order(user=admin, order_in=order_in, session=session, alpaca_client=alpaca_client)
