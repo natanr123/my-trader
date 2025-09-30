@@ -38,7 +38,8 @@ def read_items(
         )
         items = session.exec(statement).all()
 
-    return ItemsPublic(data=items, count=count)
+    # Pydantic automatically converts Item to ItemPublic at runtime, but mypy can't infer this
+    return ItemsPublic(data=items, count=count)  # type: ignore[arg-type]
 
 
 @router.get("/{id}", response_model=ItemPublic)
