@@ -29,6 +29,7 @@ def create_order(
     return order
 
 
+# Not yet safe. Need to add authentication
 @router.post("/by_admin", response_model=OrderPublic)
 def create_order_by_admin(
     order_in: OrderCreate,
