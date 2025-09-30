@@ -1,6 +1,6 @@
 from datetime import datetime, timezone, timedelta
 from enum import Enum
-from typing import Optional
+from typing import Optional, Any
 from sqlmodel import SQLModel, Field, Relationship
 from transitions import Machine, EventData
 from pydantic import PrivateAttr
@@ -60,19 +60,19 @@ class Order(OrderBase, table=True):
     )
     owner: User = Relationship(back_populates="orders")
 
-    def __init__(self, **data):
+    def __init__(self, **data: Any) -> None:
         super().__init__(**data)
         # Don't create machine here - delay until needed
         self._machine = None
 
-    def buy_submitted(self, alpaca_order_id: UUID):
+    def buy_submitted(self, alpaca_order_id: UUID) -> None:
         self.alpaca_buy_order_id = alpaca_order_id
         self.machine.buy_submitted()
 
-    def buy_accepted(self):
+    def buy_accepted(self) -> None:
         self.machine.buy_accepted()
 
-    def buy_filled(self, filled_avg_price: float, buy_filled_qty: float, market_close_at: datetime):
+    def buy_filled(self, filled_avg_price: float, buy_filled_qty: float, market_close_at: datetime) -> None:
         if self.status == VirtualOrderStatus.BUY_PENDING_NEW:
             self.buy_accepted()
         self.buy_filled_avg_price = filled_avg_price
@@ -82,21 +82,21 @@ class Order(OrderBase, table=True):
         self.stop_loss_price = filled_avg_price * 0.95
         self.machine.buy_filled()
 
-    def sell_submitted(self, alpaca_order_id: UUID | None):
+    def sell_submitted(self, alpaca_order_id: UUID) -> None:
         self.alpaca_sell_order_id = alpaca_order_id
         self.machine.sell_submitted()
 
-    def sell_accepted(self):
+    def sell_accepted(self) -> None:
         self.machine.sell_accepted()
 
-    def sell_filled(self, filled_avg_price: float, filled_qty: float):
+    def sell_filled(self, filled_avg_price: float, filled_qty: float) -> None:
         if self.status == VirtualOrderStatus.SELL_PENDING_NEW:
             self.sell_accepted()
         self.sell_filled_avg_price = filled_avg_price
         self.sell_filled_qty = filled_qty
         self.machine.sell_filled()
 
-    def sell_failed(self):
+    def sell_failed(self) -> None:
         self.machine.sell_failed()
 
 
