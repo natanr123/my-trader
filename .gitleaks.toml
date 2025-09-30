@@ -1,0 +1,35 @@
+# Gitleaks configuration file
+# https://github.com/gitleaks/gitleaks
+
+title = "Gitleaks configuration for my-trader"
+
+[allowlist]
+description = "Allowlist for test files and known safe patterns"
+
+# Allow test environment files with dummy credentials
+paths = [
+    '''ci/test/.*\.env''',
+    '''ci-test\.env''',
+    '''test\.env''',
+]
+
+# Allow dummy/test credentials that are clearly marked
+regexes = [
+    '''NOTREAL''',  # Dummy API keys prefixed with NOTREAL
+    '''test@test\.com''',  # Test email
+    '''password.*test''',  # Test passwords
+    '''SECRET_KEY=test''',  # Test secret key
+]
+
+# Optional: Define custom rules for specific patterns you want to detect
+[[rules]]
+id = "alpaca-api-key"
+description = "Alpaca API Key"
+regex = '''ALPACA_API_KEY\s*=\s*[A-Z0-9]{20,}'''
+path = '''\.env$|alpaca\.env$'''
+
+[[rules]]
+id = "alpaca-secret-key"
+description = "Alpaca Secret Key"
+regex = '''ALPACA_SECRET_KEY\s*=\s*[A-Za-z0-9]{40,}'''
+path = '''\.env$|alpaca\.env$'''
