@@ -13,6 +13,24 @@ class OrderSyncData:
     buy_order: AlpacaOrder
     sell_order: AlpacaOrder | None
 
+    def get_buy_order_filled_avg_price(self) -> float:
+        assert isinstance(self.buy_order.filled_avg_price, float)
+        return self.buy_order.filled_avg_price
+
+    def get_buy_order_filled_qty(self) -> float:
+        assert isinstance(self.buy_order.filled_qty, float)
+        return self.buy_order.filled_qty
+
+    def get_sell_order_filled_avg_price(self) -> float:
+        assert self.sell_order is not None
+        assert isinstance(self.sell_order.filled_avg_price, float)
+        return self.sell_order.filled_avg_price
+
+    def get_sell_order_filled_qty(self) -> float:
+        assert self.sell_order is not None
+        assert isinstance(self.sell_order.filled_qty, float)
+        return self.sell_order.filled_qty
+
 class OrderCrud:
     @classmethod
     def _fetch_order_data(cls, order: Order, alpaca_client: MyAlpacaClient) -> OrderSyncData:
@@ -33,8 +51,8 @@ class OrderCrud:
         elif sync_data.buy_order.status == AlpacaOrderStatus.FILLED:
             print('the order id=', order.id, 'moving from buying to filled')
             market_close_at = alpaca_client.get_next_close()
-            order.buy_filled(filled_avg_price=sync_data.buy_order.filled_avg_price,
-                           buy_filled_qty=sync_data.buy_order.filled_qty, market_close_at=market_close_at)
+            order.buy_filled(filled_avg_price=sync_data.get_buy_order_filled_avg_price(),
+                           buy_filled_qty=sync_data.get_buy_order_filled_qty(), market_close_at=market_close_at)
 
     @classmethod
     def _handle_buy_accepted(cls, order: Order, sync_data: OrderSyncData, alpaca_client: MyAlpacaClient):
@@ -43,8 +61,8 @@ class OrderCrud:
         elif sync_data.buy_order.status == AlpacaOrderStatus.FILLED:
             print('the order id=', order.id, 'is moving from buying accepted buying to filled')
             market_close_at = alpaca_client.get_next_close()
-            order.buy_filled(filled_avg_price=sync_data.buy_order.filled_avg_price,
-                           buy_filled_qty=sync_data.buy_order.filled_qty, market_close_at=market_close_at)
+            order.buy_filled(filled_avg_price=sync_data.get_buy_order_filled_avg_price(),
+                           buy_filled_qty=sync_data.get_buy_order_filled_qty(), market_close_at=market_close_at)
 
     @classmethod
     def _handle_sell_pending_new(cls, order: Order, sync_data: OrderSyncData):
@@ -54,8 +72,8 @@ class OrderCrud:
         if sync_data.sell_order.status == AlpacaOrderStatus.ACCEPTED:
             order.sell_accepted()
         elif sync_data.sell_order.status == AlpacaOrderStatus.FILLED:
-            order.sell_filled(filled_avg_price=sync_data.sell_order.filled_avg_price,
-                            filled_qty=sync_data.sell_order.filled_qty)
+            order.sell_filled(filled_avg_price=sync_data.get_sell_order_filled_avg_price(),
+                            filled_qty=sync_data.get_sell_order_filled_qty())
 
     @classmethod
     def apply_sell_rules(cls, order: Order, alpaca_client: MyAlpacaClient):
