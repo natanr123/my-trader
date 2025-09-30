@@ -22,9 +22,9 @@ class AlpacaSettings(BaseSettings):
     @computed_field
     def credentials(self) -> dict[str, Any]:
         return {
-            'api-key': self.ALPACA_API_KEY,
-            'secret-key': self.ALPACA_SECRET_KEY,
-            'paper': self.ALPACA_PAPER,
+            "api-key": self.ALPACA_API_KEY,
+            "secret-key": self.ALPACA_SECRET_KEY,
+            "paper": self.ALPACA_PAPER,
         }
 
 

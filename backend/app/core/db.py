@@ -20,6 +20,7 @@ def seed_data(session: Session):
         )
         user = crud.create_user(session=session, user_create=user_in)
 
+
 def init_db(session: Session) -> None:
     # Tables should be created with Alembic migrations
     # But if you don't want to use migrations, create
@@ -29,4 +30,3 @@ def init_db(session: Session) -> None:
     # This works because the models are already imported and registered from app.models
     # SQLModel.metadata.create_all(engine)
     seed_data(session)
-

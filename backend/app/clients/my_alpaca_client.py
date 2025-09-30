@@ -13,20 +13,21 @@ from alpaca.trading.models import Position as AlpacaPosition
 from alpaca.trading.requests import MarketOrderRequest
 
 # AlpacaOrderStatus Is imported in other files. And it is more friendly to be imported from here and confused with the regular "order" status
-__all__ = ['MyAlpacaClient', 'AlpacaOrderStatus']
+__all__ = ["MyAlpacaClient", "AlpacaOrderStatus"]
+
 
 class MyAlpacaClient:
     def __init__(self, credentials: dict[str, Any]):
         self.credentials = credentials
 
         self.trading_client = TradingClient(
-            api_key=credentials['api-key'],
-            secret_key=credentials['secret-key'],
-            paper=credentials['paper'],
+            api_key=credentials["api-key"],
+            secret_key=credentials["secret-key"],
+            paper=credentials["paper"],
         )
         self.data_client = StockHistoricalDataClient(
-            api_key=credentials['api-key'],
-            secret_key=credentials['secret-key'],
+            api_key=credentials["api-key"],
+            secret_key=credentials["secret-key"],
         )
 
     def get_current_price(self, symbol: str) -> float:
@@ -35,34 +36,36 @@ class MyAlpacaClient:
         latest_quote = self.data_client.get_stock_latest_quote(request_params)
         return float(latest_quote[symbol].ask_price)
 
-    def submit_buy_order(self, symbol: str , amount: float) -> AlpacaOrder:
+    def submit_buy_order(self, symbol: str, amount: float) -> AlpacaOrder:
         market_order = MarketOrderRequest(
             symbol=symbol,
             notional=amount,
             side=OrderSide.BUY,
-            time_in_force=TimeInForce.DAY
+            time_in_force=TimeInForce.DAY,
         )
         alpaca_order = self.trading_client.submit_order(market_order)
         assert isinstance(alpaca_order, AlpacaOrder)
         return alpaca_order
 
-    def submit_sell_order(self, symbol: str , amount: float) -> AlpacaOrder:
+    def submit_sell_order(self, symbol: str, amount: float) -> AlpacaOrder:
         market_order = MarketOrderRequest(
             symbol=symbol,
             notional=amount,
             side=OrderSide.SELL,
-            time_in_force=TimeInForce.DAY
+            time_in_force=TimeInForce.DAY,
         )
         alpaca_order = self.trading_client.submit_order(market_order)
         assert isinstance(alpaca_order, AlpacaOrder)
         return alpaca_order
 
-    def submit_liquidate_by_order(self, symbol: str, alpaca_order: AlpacaOrder) -> AlpacaOrder:
+    def submit_liquidate_by_order(
+        self, symbol: str, alpaca_order: AlpacaOrder
+    ) -> AlpacaOrder:
         market_order = MarketOrderRequest(
             symbol=symbol,
             qty=alpaca_order.filled_qty,
             side=OrderSide.SELL,
-            time_in_force=TimeInForce.DAY
+            time_in_force=TimeInForce.DAY,
         )
         liquidate_order = self.trading_client.submit_order(market_order)
         assert isinstance(liquidate_order, AlpacaOrder)
@@ -80,7 +83,9 @@ class MyAlpacaClient:
 
         # Convert string values to float and round to 4 decimal places
         if alpaca_order.filled_avg_price is not None:
-            alpaca_order.filled_avg_price = round(float(alpaca_order.filled_avg_price), 4)
+            alpaca_order.filled_avg_price = round(
+                float(alpaca_order.filled_avg_price), 4
+            )
 
         if alpaca_order.filled_qty is not None:
             alpaca_order.filled_qty = round(float(alpaca_order.filled_qty), 4)
@@ -114,7 +119,7 @@ class MyAlpacaClient:
         assert isinstance(clock, AlpacaClock)
         current_time_utc = clock.timestamp.astimezone(timezone.utc)
         # If the input time is naive (no timezone), assume it's UTC
-        assert time.tzinfo is None, 'time to check is timezone-aware which is not good'
+        assert time.tzinfo is None, "time to check is timezone-aware which is not good"
         time = time.replace(tzinfo=timezone.utc)
 
         return current_time_utc >= time
@@ -132,7 +137,3 @@ class MyAlpacaClient:
         current_time_utc = clock.timestamp.astimezone(timezone.utc)
         next_close = clock.next_close.astimezone(timezone.utc)
         return next_close.date() == current_time_utc.date()
-
-
-
-

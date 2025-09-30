@@ -23,9 +23,11 @@ class VirtualOrderStatus(str, Enum):
     SELL_FILLED = "sell_filled"
     SELL_FAILED = "sell_failed"
 
+
 class OrderCore(SQLModel):
     symbol: str
     amount: float = Field(gt=0)
+
 
 class OrderBase(OrderCore):
     alpaca_buy_order_id: UUID | None = Field(
@@ -59,11 +61,10 @@ class OrderBase(OrderCore):
 
     _machine: Machine = PrivateAttr()
 
+
 class Order(OrderBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    owner_id: UUID = Field(
-        foreign_key="user.id", nullable=False, ondelete="CASCADE"
-    )
+    owner_id: UUID = Field(foreign_key="user.id", nullable=False, ondelete="CASCADE")
     owner: User = Relationship(back_populates="orders")
 
     def __init__(self, **data: Any) -> None:
@@ -78,7 +79,9 @@ class Order(OrderBase, table=True):
     def buy_accepted(self) -> None:
         self.machine.buy_accepted()
 
-    def buy_filled(self, filled_avg_price: float, buy_filled_qty: float, market_close_at: datetime) -> None:
+    def buy_filled(
+        self, filled_avg_price: float, buy_filled_qty: float, market_close_at: datetime
+    ) -> None:
         if self.status == VirtualOrderStatus.BUY_PENDING_NEW:
             self.buy_accepted()
         self.buy_filled_avg_price = filled_avg_price
@@ -105,50 +108,81 @@ class Order(OrderBase, table=True):
     def sell_failed(self) -> None:
         self.machine.sell_failed()
 
-
-
     @staticmethod
     def create_machine(model: "Order") -> Machine:
-
         class MyMachine(Machine):
             def after_state_changed(self, event: EventData) -> None:
                 self._model.status = VirtualOrderStatus(event.state.value)
-                logger.info('Model status was updated to %s', event.state.name)
+                logger.info("Model status was updated to %s", event.state.name)
 
             def set_model(self, model: "Order") -> None:
                 self._model = model
 
         transitions_def = [
-            {"trigger": "buy_submitted", "source": VirtualOrderStatus.NEW, "dest": VirtualOrderStatus.BUY_PENDING_NEW},
-            {"trigger": "buy_accepted", "source": VirtualOrderStatus.BUY_PENDING_NEW, "dest": VirtualOrderStatus.BUY_ACCEPTED},
-            {"trigger": "buy_filled", "source": VirtualOrderStatus.BUY_ACCEPTED, "dest": VirtualOrderStatus.BUY_FILLED},
-            {"trigger": "sell_submitted", "source": VirtualOrderStatus.BUY_FILLED, "dest": VirtualOrderStatus.SELL_PENDING_NEW},
-            {"trigger": "sell_failed", "source": VirtualOrderStatus.BUY_FILLED, "dest": VirtualOrderStatus.SELL_FAILED},
-            {"trigger": "sell_accepted", "source": VirtualOrderStatus.SELL_PENDING_NEW, "dest": VirtualOrderStatus.SELL_ACCEPTED},
-            {"trigger": "sell_filled", "source": VirtualOrderStatus.SELL_ACCEPTED, "dest": VirtualOrderStatus.SELL_FILLED},
+            {
+                "trigger": "buy_submitted",
+                "source": VirtualOrderStatus.NEW,
+                "dest": VirtualOrderStatus.BUY_PENDING_NEW,
+            },
+            {
+                "trigger": "buy_accepted",
+                "source": VirtualOrderStatus.BUY_PENDING_NEW,
+                "dest": VirtualOrderStatus.BUY_ACCEPTED,
+            },
+            {
+                "trigger": "buy_filled",
+                "source": VirtualOrderStatus.BUY_ACCEPTED,
+                "dest": VirtualOrderStatus.BUY_FILLED,
+            },
+            {
+                "trigger": "sell_submitted",
+                "source": VirtualOrderStatus.BUY_FILLED,
+                "dest": VirtualOrderStatus.SELL_PENDING_NEW,
+            },
+            {
+                "trigger": "sell_failed",
+                "source": VirtualOrderStatus.BUY_FILLED,
+                "dest": VirtualOrderStatus.SELL_FAILED,
+            },
+            {
+                "trigger": "sell_accepted",
+                "source": VirtualOrderStatus.SELL_PENDING_NEW,
+                "dest": VirtualOrderStatus.SELL_ACCEPTED,
+            },
+            {
+                "trigger": "sell_filled",
+                "source": VirtualOrderStatus.SELL_ACCEPTED,
+                "dest": VirtualOrderStatus.SELL_FILLED,
+            },
         ]
-        m = MyMachine(states=VirtualOrderStatus, transitions=transitions_def, initial=model.status, send_event=True, after_state_change='after_state_changed')
+        m = MyMachine(
+            states=VirtualOrderStatus,
+            transitions=transitions_def,
+            initial=model.status,
+            send_event=True,
+            after_state_change="after_state_changed",
+        )
         m.set_model(model)
         return m
 
     @property
     def machine(self) -> Machine:
         # Ensure __pydantic_private__ exists for instances loaded from DB
-        if not hasattr(self, '__pydantic_private__') or self.__pydantic_private__ is None:
+        if (
+            not hasattr(self, "__pydantic_private__")
+            or self.__pydantic_private__ is None
+        ):
             self.__pydantic_private__ = {}
 
         # Handle case where _machine doesn't exist (loaded from DB) or is None (new instance)
-        if getattr(self, '_machine', None) is None:
+        if getattr(self, "_machine", None) is None:
             self._machine = Order.create_machine(self)
         return self._machine
+
 
 class OrderCreate(OrderCore):
     model_config = {"extra": "forbid"}
 
+
 class OrderPublic(OrderBase):
     id: int
-
-
-
-
-
