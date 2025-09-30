@@ -24,8 +24,10 @@ jobs:
         with:
           version: "0.4.15"
           enable-cache: true
-      - run: docker compose --env-file test.env down -v --remove-orphans
-      - run: docker compose --env-file test.env up -d db mailcatcher
+      - name: Setup test environment
+        run: cp test.env .env
+      - run: docker compose down -v --remove-orphans
+      - run: docker compose up -d db mailcatcher
       - name: Migrate DB
         run: uv run bash scripts/prestart.sh
         working-directory: backend
