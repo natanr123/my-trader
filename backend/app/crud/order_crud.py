@@ -79,6 +79,7 @@ class OrderCrud:
     def apply_sell_rules(cls, order: Order, alpaca_client: MyAlpacaClient):
         print('apply_sell_rules order id=', order.id, 'status=', order.status)
         if order.status == VirtualOrderStatus.BUY_FILLED:
+            assert order.force_sell_at is not None
             sell_time_passed = alpaca_client.is_time_passed(order.force_sell_at)
             if sell_time_passed:
                 try:
