@@ -43,8 +43,9 @@ class UpdatePassword(SQLModel):
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
-    items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)  # type: ignore[name-defined]
-    orders: list["Order"] = Relationship(back_populates="owner", cascade_delete=True)  # type: ignore[name-defined]
+    # Forward references for circular imports - noqa needed because Ruff can't resolve string type hints
+    items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)  # type: ignore[name-defined]  # noqa: F821
+    orders: list["Order"] = Relationship(back_populates="owner", cascade_delete=True)  # type: ignore[name-defined]  # noqa: F821
 
 
 # Properties to return via API, id is always required
