@@ -45,7 +45,8 @@ def read_users(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
     statement = select(User).offset(skip).limit(limit)
     users = session.exec(statement).all()
 
-    return UsersPublic(data=list(users), count=count)
+    # Pydantic automatically converts User to UserPublic at runtime, but mypy can't infer this
+    return UsersPublic(data=list(users), count=count)  # type: ignore[arg-type]
 
 
 @router.post(
