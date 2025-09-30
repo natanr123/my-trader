@@ -5,7 +5,7 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-.env
+/.env
 
 backend/.ptpython_history
 backend/alpaca_key_paper.json
