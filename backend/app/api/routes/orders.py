@@ -40,7 +40,8 @@ def list_orders(
     statement = select(Order).where(Order.owner_id == current_user.id)
     results = session.exec(statement)
     orders = results.all()
-    return orders
+    # Pydantic automatically converts Order to OrderPublic at runtime, but mypy can't infer this
+    return orders  # type: ignore[return-value]
 
 
 
@@ -66,14 +67,16 @@ def sync_order(id: int, session: SessionDep, alpaca_client: AlpacaDep, current_u
     session.commit()
     session.refresh(order)
 
-    return order
+    # Pydantic automatically converts Order to OrderPublic at runtime, but mypy can't infer this
+    return order  # type: ignore[return-value]
 
 @router.get("/{id}")
 def show_order(id: int, session: SessionDep) -> OrderPublic:
     order = session.get(Order, id)
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
-    return order
+    # Pydantic automatically converts Order to OrderPublic at runtime, but mypy can't infer this
+    return order  # type: ignore[return-value]
 
 @router.delete("/{id}", status_code=204)
 def delete_order(id: int, session: SessionDep, current_user: CurrentUser):
