@@ -51,7 +51,7 @@ class OrderBase(OrderCore):
     # for soft delete option. currently not used
     deleted_by: Optional[str] = Field(default=None, nullable=True)
 
-    _machine: Optional[Machine] = PrivateAttr(default=None)
+    _machine: Machine = PrivateAttr()
 
 class Order(OrderBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -62,8 +62,8 @@ class Order(OrderBase, table=True):
 
     def __init__(self, **data: Any) -> None:
         super().__init__(**data)
-        # Don't create machine here - delay until needed
-        self._machine = None
+        # Create machine immediately
+        self._machine = Order.create_machine(self)
 
     def buy_submitted(self, alpaca_order_id: UUID) -> None:
         self.alpaca_buy_order_id = alpaca_order_id
