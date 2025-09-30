@@ -1,6 +1,6 @@
 import secrets
 import warnings
-from typing import Annotated, Any, Literal
+from typing import Any
 
 from pydantic import (
     AnyUrl,
@@ -27,9 +27,9 @@ class AlpacaSettings(BaseSettings):
     ALPACA_SECRET_KEY: str
     ALPACA_PAPER: bool
 
-    @computed_field
     @property
-    def credentials(self) -> dict:
+    @computed_field
+    def credentials(self) -> dict[str, Any]:
         return {
             'api-key': self.ALPACA_API_KEY,
             'secret-key': self.ALPACA_SECRET_KEY,
