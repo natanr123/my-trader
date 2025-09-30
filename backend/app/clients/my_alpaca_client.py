@@ -9,8 +9,13 @@ from uuid import UUID
 
 from alpaca.trading.models import OrderStatus as AlpacaOrderStatus
 
+from typing import Any
+
+# AlpacaOrderStatus Is imported in other files. And it is more friendly to be imported from here and confused with the regular "order" status
+__all__ = ['MyAlpacaClient', 'AlpacaOrderStatus']
+
 class MyAlpacaClient:
-    def __init__(self, credentials: dict[str, str | bool]):
+    def __init__(self, credentials: dict[str, Any]):
         self.credentials = credentials
 
         self.trading_client = TradingClient(
@@ -37,6 +42,7 @@ class MyAlpacaClient:
             time_in_force=TimeInForce.DAY
         )
         alpaca_order = self.trading_client.submit_order(market_order)
+        assert isinstance(alpaca_order, AlpacaOrder)
         return alpaca_order
 
     def submit_sell_order(self, symbol: str , amount: float) -> AlpacaOrder:
@@ -47,6 +53,7 @@ class MyAlpacaClient:
             time_in_force=TimeInForce.DAY
         )
         alpaca_order = self.trading_client.submit_order(market_order)
+        assert isinstance(alpaca_order, AlpacaOrder)
         return alpaca_order
 
     def submit_liquidate_by_order(self, symbol: str, alpaca_order: AlpacaOrder) -> AlpacaOrder:
@@ -56,24 +63,27 @@ class MyAlpacaClient:
             side=OrderSide.SELL,
             time_in_force=TimeInForce.DAY
         )
-        alpaca_order = self.trading_client.submit_order(market_order)
-        return alpaca_order
+        liquidate_order = self.trading_client.submit_order(market_order)
+        assert isinstance(liquidate_order, AlpacaOrder)
+        return liquidate_order
 
     def close_position(self, symbol: str) -> AlpacaOrder:
         alpaca_order = self.trading_client.close_position(symbol)
+        assert isinstance(alpaca_order, AlpacaOrder)
         return alpaca_order
     
     def get_order_by_id(self, order_id: UUID) -> AlpacaOrder:
         """Get order by ID with automatic type conversion for numeric fields"""
         alpaca_order = self.trading_client.get_order_by_id(order_id)
-        
+        assert isinstance(alpaca_order, AlpacaOrder)
+
         # Convert string values to float and round to 4 decimal places
         if alpaca_order.filled_avg_price is not None:
             alpaca_order.filled_avg_price = round(float(alpaca_order.filled_avg_price), 4)
-        
+
         if alpaca_order.filled_qty is not None:
             alpaca_order.filled_qty = round(float(alpaca_order.filled_qty), 4)
-            
+
         return alpaca_order
 
     def get_position(self, symbol: str) -> AlpacaPosition:

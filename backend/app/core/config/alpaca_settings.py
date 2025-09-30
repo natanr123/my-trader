@@ -27,7 +27,6 @@ class AlpacaSettings(BaseSettings):
     ALPACA_SECRET_KEY: str
     ALPACA_PAPER: bool
 
-    @property
     @computed_field
     def credentials(self) -> dict[str, Any]:
         return {
