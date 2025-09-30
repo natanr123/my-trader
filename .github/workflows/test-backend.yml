@@ -25,7 +25,10 @@ jobs:
           version: "0.4.15"
           enable-cache: true
       - name: Setup test environment
-        run: cp ci-test.env .env
+        run: |
+          cp ci/test/.env .env
+          mkdir -p backend
+          cp ci/test/backend/alpaca.env backend/alpaca.env
       - run: docker compose down -v --remove-orphans
       - run: docker compose up -d db mailcatcher
       - name: Migrate DB
