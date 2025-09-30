@@ -3,8 +3,8 @@ from sqlmodel import create_engine
 from app.core.config import settings
 
 # Importing models before create_engine
-
 import app.models.order, app.models.item, app.models.user
+
 Order = app.models.order.Order
 Item = app.models.item.Item
 User = app.models.user.User
