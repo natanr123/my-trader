@@ -3,7 +3,7 @@ from alpaca.data import StockHistoricalDataClient
 from alpaca.data.requests import StockLatestQuoteRequest
 from alpaca.trading.requests import MarketOrderRequest
 from alpaca.trading.enums import OrderSide, TimeInForce
-from alpaca.trading.models import Order as AlpacaOrder, Position as AlpacaPosition
+from alpaca.trading.models import Order as AlpacaOrder, Position as AlpacaPosition, Clock as AlpacaClock
 from datetime import datetime, timezone
 from uuid import UUID
 
@@ -88,39 +88,46 @@ class MyAlpacaClient:
 
     def get_position(self, symbol: str) -> AlpacaPosition:
         pos = self.trading_client.get_open_position(symbol)
+        assert isinstance(pos, AlpacaPosition)
         return pos
     
     def get_next_close(self) -> datetime:
         """Get the next market close time in UTC"""
         clock = self.trading_client.get_clock()
+        assert isinstance(clock, AlpacaClock)
         return clock.next_close.astimezone(timezone.utc)
 
     def get_next_open(self) -> datetime:
         """Get the next market close time in UTC"""
         clock = self.trading_client.get_clock()
+        assert isinstance(clock, AlpacaClock)
         return clock.next_open.astimezone(timezone.utc)
 
     def get_current_time(self) -> datetime:
         clock = self.trading_client.get_clock()
+        assert isinstance(clock, AlpacaClock)
         return clock.timestamp.astimezone(timezone.utc)
 
     def is_time_passed(self, time: datetime) -> bool:
         clock = self.trading_client.get_clock()
+        assert isinstance(clock, AlpacaClock)
         current_time_utc = clock.timestamp.astimezone(timezone.utc)
         # If the input time is naive (no timezone), assume it's UTC
         assert time.tzinfo is None, 'time to check is timezone-aware which is not good'
         time = time.replace(tzinfo=timezone.utc)
-            
+
         return current_time_utc >= time
 
     def is_next_open_today(self) -> bool:
         clock = self.trading_client.get_clock()
+        assert isinstance(clock, AlpacaClock)
         current_time_utc = clock.timestamp.astimezone(timezone.utc)
         next_open = clock.next_open.astimezone(timezone.utc)
         return next_open.date() == current_time_utc.date()
 
     def is_next_close_today(self) -> bool:
         clock = self.trading_client.get_clock()
+        assert isinstance(clock, AlpacaClock)
         current_time_utc = clock.timestamp.astimezone(timezone.utc)
         next_close = clock.next_close.astimezone(timezone.utc)
         return next_close.date() == current_time_utc.date()
