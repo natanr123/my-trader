@@ -1,15 +1,16 @@
-from alpaca.trading.client import TradingClient
-from alpaca.data import StockHistoricalDataClient
-from alpaca.data.requests import StockLatestQuoteRequest
-from alpaca.trading.requests import MarketOrderRequest
-from alpaca.trading.enums import OrderSide, TimeInForce
-from alpaca.trading.models import Order as AlpacaOrder, Position as AlpacaPosition, Clock as AlpacaClock
 from datetime import datetime, timezone
+from typing import Any
 from uuid import UUID
 
+from alpaca.data import StockHistoricalDataClient
+from alpaca.data.requests import StockLatestQuoteRequest
+from alpaca.trading.client import TradingClient
+from alpaca.trading.enums import OrderSide, TimeInForce
+from alpaca.trading.models import Clock as AlpacaClock
+from alpaca.trading.models import Order as AlpacaOrder
 from alpaca.trading.models import OrderStatus as AlpacaOrderStatus
-
-from typing import Any
+from alpaca.trading.models import Position as AlpacaPosition
+from alpaca.trading.requests import MarketOrderRequest
 
 # AlpacaOrderStatus Is imported in other files. And it is more friendly to be imported from here and confused with the regular "order" status
 __all__ = ['MyAlpacaClient', 'AlpacaOrderStatus']
@@ -71,7 +72,7 @@ class MyAlpacaClient:
         alpaca_order = self.trading_client.close_position(symbol)
         assert isinstance(alpaca_order, AlpacaOrder)
         return alpaca_order
-    
+
     def get_order_by_id(self, order_id: UUID) -> AlpacaOrder:
         """Get order by ID with automatic type conversion for numeric fields"""
         alpaca_order = self.trading_client.get_order_by_id(order_id)
@@ -90,7 +91,7 @@ class MyAlpacaClient:
         pos = self.trading_client.get_open_position(symbol)
         assert isinstance(pos, AlpacaPosition)
         return pos
-    
+
     def get_next_close(self) -> datetime:
         """Get the next market close time in UTC"""
         clock = self.trading_client.get_clock()

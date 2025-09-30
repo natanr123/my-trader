@@ -1,9 +1,12 @@
 # This file is created (Instead just place create_engine in db.py) in order to make the importing of models (before create_engine) explicit
 from sqlmodel import create_engine
-from app.core.config import settings
+
+import app.models.item
 
 # Importing models before create_engine
-import app.models.order, app.models.item, app.models.user
+import app.models.order
+import app.models.user
+from app.core.config import settings
 
 Order = app.models.order.Order
 Item = app.models.item.Item

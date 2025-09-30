@@ -12,18 +12,18 @@ from app.api.deps import (
 )
 from app.core.config import settings
 from app.core.security import get_password_hash, verify_password
-from app.models.message import Message
-
 from app.models.item import Item
-from app.models.user import User
-
-from app.models.user import (UpdatePassword,
+from app.models.message import Message
+from app.models.user import (
+    UpdatePassword,
+    User,
     UserCreate,
     UserPublic,
     UserRegister,
     UsersPublic,
     UserUpdate,
-    UserUpdateMe)
+    UserUpdateMe,
+)
 from app.utils import generate_new_account_email, send_email
 
 router = APIRouter(prefix="/users", tags=["users"])

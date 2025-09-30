@@ -1,11 +1,14 @@
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 from enum import Enum
-from typing import Optional, Any
-from sqlmodel import SQLModel, Field, Relationship
-from transitions import Machine, EventData
-from pydantic import PrivateAttr
+from typing import Any
 from uuid import UUID
+
+from pydantic import PrivateAttr
+from sqlmodel import Field, Relationship, SQLModel
+from transitions import EventData, Machine
+
 from app.models.user import User
+
 
 class VirtualOrderStatus(str, Enum):
     NEW = "new"
@@ -33,28 +36,28 @@ class OrderBase(OrderCore):
         index=True,
         sa_column_kwargs={"unique": True},  # make it globally unique
     )
-    alpaca_client_order_id: Optional[str] = None
+    alpaca_client_order_id: str | None = None
     symbol: str
     quantity: float = 0.0
-    force_sell_at: Optional[datetime] = None
-    buy_filled_avg_price: Optional[float] = None
-    buy_filled_qty: Optional[float] = None
-    sell_filled_avg_price: Optional[float] = None
-    sell_filled_qty: Optional[float] = None
-    target_profit_price: Optional[float] = None
-    stop_loss_price: Optional[float] = None
+    force_sell_at: datetime | None = None
+    buy_filled_avg_price: float | None = None
+    buy_filled_qty: float | None = None
+    sell_filled_avg_price: float | None = None
+    sell_filled_qty: float | None = None
+    target_profit_price: float | None = None
+    stop_loss_price: float | None = None
     status: VirtualOrderStatus = Field(default=VirtualOrderStatus.NEW)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    filled_at: Optional[datetime] = None
-    sold_at: Optional[datetime] = None
-    error_message: Optional[str] = None
+    filled_at: datetime | None = None
+    sold_at: datetime | None = None
+    error_message: str | None = None
     # for soft delete option. currently not used
-    deleted_by: Optional[str] = Field(default=None, nullable=True)
+    deleted_by: str | None = Field(default=None, nullable=True)
 
     _machine: Machine = PrivateAttr()
 
 class Order(OrderBase, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     owner_id: UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )

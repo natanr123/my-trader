@@ -1,12 +1,12 @@
-from sqlmodel import Session
 from dataclasses import dataclass
 
-from app.models.order import Order
-from app.models.order import OrderCreate
-from app.clients.my_alpaca_client import MyAlpacaClient, AlpacaOrder, AlpacaOrderStatus
-from app.models.user import User
-from app.models.order import VirtualOrderStatus
 from alpaca.common.exceptions import APIError
+from sqlmodel import Session
+
+from app.clients.my_alpaca_client import AlpacaOrder, AlpacaOrderStatus, MyAlpacaClient
+from app.models.order import Order, OrderCreate, VirtualOrderStatus
+from app.models.user import User
+
 
 @dataclass
 class OrderSyncData:

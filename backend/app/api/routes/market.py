@@ -1,10 +1,6 @@
-from fastapi import APIRouter, HTTPException
-from sqlmodel import select
+from fastapi import APIRouter
 
 from app.api.deps.alpaca_dep import AlpacaDep
-
-from alpaca.common.exceptions import APIError
-
 
 router = APIRouter(prefix="/market", tags=["market"])
 

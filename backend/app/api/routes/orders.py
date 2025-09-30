@@ -1,11 +1,10 @@
 from fastapi import APIRouter, HTTPException
 from sqlmodel import select
 
-from app.api.deps import SessionDep
+from app.api.deps import CurrentUser, SessionDep
 from app.api.deps.alpaca_dep import AlpacaDep
-from app.models.order import Order, OrderCreate, OrderPublic, VirtualOrderStatus
-from app.api.deps import CurrentUser
 from app.crud.order_crud import OrderCrud
+from app.models.order import Order, OrderCreate, OrderPublic
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 
