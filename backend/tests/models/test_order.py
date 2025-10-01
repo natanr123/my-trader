@@ -6,8 +6,8 @@ from app.models.user import UserCreate
 from app.crud import crud
 from app.models.order import OrderCreate
 
-def test_buy_submitted(alpaca_client: MyAlpacaClient, db: Session) -> None:
-    user_in = UserCreate(email='test@test.com', password='12345678')
+def test_buy_submitted(db: Session) -> None:
+    user_in = UserCreate(email='test_buy_submitted@test.com', password='12345678')
     user = crud.create_user(session=db, user_create=user_in)
     db.add(user)
     db.commit()
