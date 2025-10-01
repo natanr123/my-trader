@@ -5,7 +5,7 @@ from app.models.order import Order, VirtualOrderStatus
 from uuid import UUID
 from datetime import datetime
 
-def test_handle_buy_pending_new(alpaca_client: MyAlpacaClient, db: Session) -> None:
+def test_handle_buy_pending_new(alpaca_client: MyAlpacaClient) -> None:
     order = Order(status=VirtualOrderStatus.BUY_PENDING_NEW)
     buy_order = AlpacaOrder(id=UUID('cbe2c370-f613-41d0-9833-248f1ade5d6d'),
                             client_order_id="",

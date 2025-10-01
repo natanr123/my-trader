@@ -158,7 +158,7 @@ class Order(OrderBase, table=True):
         m = MyMachine(
             states=VirtualOrderStatus,
             transitions=transitions_def,
-            initial=model.status,
+            initial=model.status or VirtualOrderStatus.NEW,
             send_event=True,
             after_state_change="after_state_changed",
         )
