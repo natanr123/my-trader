@@ -28,25 +28,6 @@ def create_order(
     )
     return order
 
-
-# Not yet safe. Need to add authentication
-@router.post("/by_admin", response_model=OrderPublic)
-def create_order_by_admin(
-    order_in: OrderCreate,
-    session: SessionDep,
-    alpaca_client: AlpacaDep,
-):
-    from app.models.user import User
-
-    admin = session.exec(select(User).where(User.is_superuser)).first()
-    if not admin:
-        raise HTTPException(status_code=404, detail="No admin user found")
-    order = OrderCrud.create_order_with_alpaca_order(
-        user=admin, order_in=order_in, session=session, alpaca_client=alpaca_client
-    )
-    return order
-
-
 @router.get("/")
 def list_orders(session: SessionDep, current_user: CurrentUser) -> list[OrderPublic]:
     statement = select(Order).where(Order.owner_id == current_user.id)
