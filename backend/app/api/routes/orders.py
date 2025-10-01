@@ -28,6 +28,7 @@ def create_order(
     )
     return order
 
+
 @router.get("/")
 def list_orders(session: SessionDep, current_user: CurrentUser) -> list[OrderPublic]:
     statement = select(Order).where(Order.owner_id == current_user.id)
