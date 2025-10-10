@@ -21,7 +21,7 @@ fileConfig(config.config_file_name)
 from app.models.order import Order  # noqa
 from app.models.item import Item  # noqa
 from app.models.user import User, SQLModel  # noqa
-from app.core.config.db_settings import settings as db_settings # noqa
+from app.core.config.db_settings import db_settings
 
 target_metadata = SQLModel.metadata
 

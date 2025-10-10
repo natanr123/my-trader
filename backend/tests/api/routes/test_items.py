@@ -3,7 +3,7 @@ import uuid
 from fastapi.testclient import TestClient
 from sqlmodel import Session
 
-from app.core.config import settings
+from app.core.config.app_settings import app_settings as settings
 from tests.utils.item import create_random_item
 
 

@@ -10,7 +10,7 @@ from app.api.deps import (
     SessionDep,
     get_current_active_superuser,
 )
-from app.core.config import settings
+from app.core.config.app_settings import app_settings
 from app.core.security import get_password_hash, verify_password
 from app.models.item import Item
 from app.models.message import Message
@@ -64,7 +64,7 @@ def create_user(*, session: SessionDep, user_in: UserCreate) -> Any:
         )
 
     user = crud.create_user(session=session, user_create=user_in)
-    if settings.emails_enabled and user_in.email:
+    if app_settings.emails_enabled and user_in.email:
         email_data = generate_new_account_email(
             email_to=user_in.email, username=user_in.email, password=user_in.password
         )

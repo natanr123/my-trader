@@ -8,7 +8,7 @@ from app.clients.my_alpaca_client import MyAlpacaClient
 from app.main import app
 from tests.utils.user import authentication_token_from_email
 from tests.utils.utils import get_superuser_token_headers
-from app.core.config import settings
+from app.core.config.app_settings import app_settings
 from sqlmodel import Session, SQLModel, create_engine
 from app.api.deps.deps import get_db
 from collections.abc import Generator
@@ -56,5 +56,5 @@ def superuser_token_headers(client: TestClient) -> dict[str, str]:
 @pytest.fixture(name="normal_user_token_headers")
 def normal_user_token_headers(client: TestClient, db: Session) -> dict[str, str]:
     return authentication_token_from_email(
-        client=client, email=settings.EMAIL_TEST_USER, db=db
+        client=client, email=app_settings.EMAIL_TEST_USER, db=db
     )

@@ -96,4 +96,6 @@ class Settings(BaseSettings):
         return self
 
 
-settings = Settings()  # type: ignore
+app_settings = Settings()  # type: ignore
+
+__all__ = ["app_settings"]

@@ -2,7 +2,7 @@ from fastapi.testclient import TestClient
 from sqlmodel import Session
 
 from app import crud
-from app.core.config import settings
+from app.core.config.app_settings import app_settings
 from app.models.user import User, UserCreate, UserUpdate
 from tests.utils.utils import random_email, random_lower_string
 
@@ -11,7 +11,7 @@ def user_authentication_headers(
     *, client: TestClient, email: str, password: str
 ) -> dict[str, str]:
     data = {"username": email, "password": password}
-    r = client.post(f"{settings.API_V1_STR}/login/access-token", data=data)
+    r = client.post(f"{app_settings.API_V1_STR}/login/access-token", data=data)
     response = r.json()
     auth_token = response["access_token"]
     headers = {"Authorization": f"Bearer {auth_token}"}

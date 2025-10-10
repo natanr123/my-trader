@@ -8,13 +8,12 @@ from pydantic import (
 )
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing_extensions import Self
-from app.core.config import settings
+from app.core.config.app_settings import app_settings
 
-
-class Settings(BaseSettings):
+class DbSettings(BaseSettings):
     # Dynamically select env file based on ENVIRONMENT variable
     model_config = SettingsConfigDict(
-        env_file=f"dotenv/{settings.ENVIRONMENT}/db.env",
+        env_file=f"dotenv/{app_settings.ENVIRONMENT}/db.env",
         extra="ignore",
     )
 
@@ -24,9 +23,7 @@ class Settings(BaseSettings):
     DB_PASSWORD: str
     DB_NAME: str
 
-    @computed_field  # type: ignore[prop-decorator]
-    @property
-    def SQLALCHEMY_DATABASE_URI(self) -> str:
+    def sqlalchemy_database_uri(self) -> str:
         # PostgreSQL connection using psycopg (version 3)
         return str(
             PostgresDsn.build(
@@ -55,7 +52,6 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def _enforce_non_default_secrets(self) -> Self:
         # Import here to avoid circular dependency
-        from app.core.config.config import settings as app_settings
 
         self._check_default_secret(
             "DB_PASSWORD", self.DB_PASSWORD, app_settings.ENVIRONMENT
@@ -63,4 +59,6 @@ class Settings(BaseSettings):
         return self
 
 
-settings = Settings()  # type: ignore
+db_settings = DbSettings()
+
+__all__ = ["db_settings"]
