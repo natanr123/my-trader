@@ -1,11 +1,10 @@
 from typing import Any
-import os
 
 from pydantic import (
     computed_field,
 )
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from . import settings
+from app.core.config import settings
 
 
 class AlpacaSettings(BaseSettings):

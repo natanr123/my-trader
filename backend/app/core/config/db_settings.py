@@ -8,7 +8,7 @@ from pydantic import (
 )
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing_extensions import Self
-from . import settings
+from app.core.config import settings
 
 
 class Settings(BaseSettings):
