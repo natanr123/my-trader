@@ -12,5 +12,5 @@ api_router.include_router(orders.router)
 api_router.include_router(market.router)
 
 
-if settings.ENVIRONMENT == "local":
+if settings.ENVIRONMENT in ("local", "test"):
     api_router.include_router(private.router)
