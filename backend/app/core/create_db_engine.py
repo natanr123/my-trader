@@ -21,4 +21,4 @@ User = app.models.user.User
 engine = create_engine(str(db_settings.SQLALCHEMY_DATABASE_URI))
 
 
-__all__ = ['engine']
+__all__ = ["engine"]
