@@ -67,8 +67,8 @@ services:
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - EMAILS_FROM_EMAIL=${EMAILS_FROM_EMAIL}
-      # If you db params are not taken from db.env you should fill these values
       - DB_SERVER=db
+#       If you db params are not taken from db.env you should fill these values
 #      - DB_PORT=
 #      - DB_NAME=
 #      - DB_USER=
@@ -103,12 +103,13 @@ services:
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - EMAILS_FROM_EMAIL=${EMAILS_FROM_EMAIL}
-      # If you db params are not taken from db.env you should fill these values
+
       - DB_SERVER=db
-      - DB_PORT=
-      - DB_NAME=
-      - DB_USER=
-      - DB_PASSWORD=
+#       If you db params are not taken from db.env you should fill these values
+#      - DB_PORT=
+#      - DB_NAME=
+#      - DB_USER=
+#      - DB_PASSWORD=
       - SENTRY_DSN=${SENTRY_DSN}
 
     healthcheck:

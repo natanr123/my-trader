@@ -25,9 +25,9 @@ class Settings(BaseSettings):
     @computed_field  # type: ignore[prop-decorator]
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
-        # PostgreSQL connection
+        # PostgreSQL connection using psycopg (version 3)
         return str(PostgresDsn.build(
-            scheme="postgresql+psycopg2",
+            scheme="postgresql+psycopg",
             username=self.DB_USER,
             password=self.DB_PASSWORD,
             host=self.DB_SERVER,
