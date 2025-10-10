@@ -54,7 +54,7 @@ services:
     command: bash scripts/prestart.sh
     env_file:
       - .env
-      - backend/dotenv/${ENVIRONMENT:-default}/db.env
+      - backend/dotenv/${ENVIRONMENT:-local}/db.env
     environment:
       - DOMAIN=${DOMAIN}
       - FRONTEND_HOST=${FRONTEND_HOST?Variable not set}
@@ -89,8 +89,8 @@ services:
         condition: service_completed_successfully
     env_file:
       - .env
-      - backend/dotenv/${ENVIRONMENT:-default}/alpaca.env
-      - backend/dotenv/${ENVIRONMENT:-default}/db.env
+      - backend/dotenv/${ENVIRONMENT:-local}/alpaca.env
+      - backend/dotenv/${ENVIRONMENT:-local}/db.env
     environment:
       - DOMAIN=${DOMAIN}
       - FRONTEND_HOST=${FRONTEND_HOST?Variable not set}

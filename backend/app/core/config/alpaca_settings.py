@@ -5,12 +5,12 @@ from pydantic import (
     computed_field,
 )
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from . import settings
 
 
 class AlpacaSettings(BaseSettings):
     model_config = SettingsConfigDict(
-        # Use top level .env file (one level above ./backend/)
-        env_file=f"dotenv/{os.getenv('ENVIRONMENT', 'default')}/alpaca.env",
+        env_file=f"dotenv/{settings.ENVIRONMENT}/alpaca.env",
         env_ignore_empty=True,
         extra="ignore",
     )

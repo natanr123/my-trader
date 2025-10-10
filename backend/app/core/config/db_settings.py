@@ -8,13 +8,13 @@ from pydantic import (
 )
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing_extensions import Self
+from . import settings
 
 
 class Settings(BaseSettings):
     # Dynamically select env file based on ENVIRONMENT variable
-    # Options: default, dev, prod, test (fallback to default if not set)
     model_config = SettingsConfigDict(
-        env_file=f"dotenv/{os.getenv('ENVIRONMENT', 'default')}/db.env",
+        env_file=f"dotenv/{settings.ENVIRONMENT}/db.env",
         extra="ignore",
     )
 
