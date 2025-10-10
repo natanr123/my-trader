@@ -6,5 +6,5 @@ app.egg-info
 .coverage
 htmlcov
 .venv
-backend/dotenv/default/*.env
-backend/dotenv/prod/*.env
+dotenv/default/*.env
+dotenv/prod/*.env

@@ -8,11 +8,3 @@ node_modules/
 /.env
 /frontend/.env
 
-backend/.ptpython_history
-backend/alpaca_key_paper.json
-backend/alpaca_key_live.json
-backend/alpaca.env
-backend/tmp/
-
-backend/dotenv/local/*.env
-backend/dotenv/prod/*.env

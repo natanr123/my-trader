@@ -6,3 +6,13 @@ app.egg-info
 htmlcov
 .cache
 .venv
+
+
+.ptpython_history
+alpaca_key_paper.json
+alpaca_key_live.json
+alpaca.env
+tmp/
+
+dotenv/local/*.env
+dotenv/prod/*.env
