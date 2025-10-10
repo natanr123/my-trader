@@ -6,3 +6,5 @@ Using API from: https://alpaca.markets/
 
 Based on FastAPI official fullstack template: https://github.com/fastapi/full-stack-fastapi-template
 
+Thank You
+
