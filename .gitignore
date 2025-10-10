@@ -14,4 +14,4 @@ backend/alpaca_key_live.json
 backend/alpaca.env
 backend/tmp/
 
-backend/dotenv/**.env
+backend/dotenv/**/*.env
