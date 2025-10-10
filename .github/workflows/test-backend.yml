@@ -32,6 +32,7 @@ jobs:
           mkdir -p backend
       - run: docker compose down -v --remove-orphans
       - run: docker compose up -d db mailcatcher
+#      We are no longer using the postgresql when testing instead we are using in sqlite in memory and tables are create during the test so migration is no longer needed
 #      - name: Migrate DB
 #        run: uv run bash scripts/prestart.sh
         working-directory: backend
