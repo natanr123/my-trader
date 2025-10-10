@@ -1,3 +1,8 @@
+import os
+
+# Set test environment before any imports that load settings
+os.environ["ENVIRONMENT"] = "test"
+
 from collections.abc import Generator
 
 import pytest

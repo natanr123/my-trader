@@ -1,3 +1,4 @@
+import os
 import warnings
 
 from pydantic import (
@@ -10,9 +11,10 @@ from typing_extensions import Self
 
 
 class Settings(BaseSettings):
-    # If env params are not present will fall back to local-db
+    # Dynamically select env file based on ENVIRONMENT variable
+    # Options: default, dev, prod, test (fallback to default if not set)
     model_config = SettingsConfigDict(
-        env_file="dotenv/default/db.env",
+        env_file=f"dotenv/{os.getenv('ENVIRONMENT', 'default')}/db.env",
         extra="ignore",
     )
 

@@ -1,4 +1,5 @@
 from typing import Any
+import os
 
 from pydantic import (
     computed_field,
@@ -9,7 +10,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class AlpacaSettings(BaseSettings):
     model_config = SettingsConfigDict(
         # Use top level .env file (one level above ./backend/)
-        env_file="dotenv/default/alpaca.env",
+        env_file=f"dotenv/{os.getenv('ENVIRONMENT', 'default')}/alpaca.env",
         env_ignore_empty=True,
         extra="ignore",
     )
