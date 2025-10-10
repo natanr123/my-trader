@@ -32,7 +32,7 @@ target_metadata = SQLModel.metadata
 
 
 def get_url():
-    return str(db_settings.SQLALCHEMY_DATABASE_URI)
+    return str(db_settings.sqlalchemy_database_uri())
 
 
 def run_migrations_offline():
