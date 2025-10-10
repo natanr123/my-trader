@@ -38,8 +38,8 @@ def test_create_user_new_email(
 ) -> None:
     with (
         patch("app.utils.send_email", return_value=None),
-        patch("app.core.config.settings.SMTP_HOST", "smtp.example.com"),
-        patch("app.core.config.settings.SMTP_USER", "admin@example.com"),
+        patch("app.core.config.app_settings.app_settings.SMTP_HOST", "smtp.example.com"),
+        patch("app.core.config.app_settings.app_settings.SMTP_USER", "admin@example.com"),
     ):
         username = random_email()
         password = random_lower_string()
@@ -65,7 +65,7 @@ def test_get_existing_user(
     user = crud.create_user(session=db, user_create=user_in)
     user_id = user.id
     r = client.get(
-        f"{settings.API_V1_STR}/users/{user_id}",
+        f"{app_settings.API_V1_STR}/users/{user_id}",
         headers=superuser_token_headers,
     )
     assert 200 <= r.status_code < 300
