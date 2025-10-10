@@ -1,14 +1,14 @@
-import os
 import warnings
 
 from pydantic import (
     PostgresDsn,
-    computed_field,
     model_validator,
 )
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing_extensions import Self
+
 from app.core.config.app_settings import app_settings
+
 
 class DbSettings(BaseSettings):
     # Dynamically select env file based on ENVIRONMENT variable
