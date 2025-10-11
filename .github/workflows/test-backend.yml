@@ -12,6 +12,8 @@ on:
 jobs:
   test-backend:
     runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: test
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -28,11 +30,11 @@ jobs:
         run: |
           cp ci/test/.env .env
           mkdir -p backend
-          cp ci/test/backend/alpaca.env backend/alpaca.env
       - run: docker compose down -v --remove-orphans
       - run: docker compose up -d db mailcatcher
-      - name: Migrate DB
-        run: uv run bash scripts/prestart.sh
+#      We are no longer using the postgresql when testing instead we are using in sqlite in memory and tables are create during the test so migration is no longer needed
+#      - name: Migrate DB
+#        run: uv run bash scripts/prestart.sh
         working-directory: backend
       - name: Run tests
         run: uv run bash scripts/tests-start.sh "Coverage for ${{ github.sha }}"

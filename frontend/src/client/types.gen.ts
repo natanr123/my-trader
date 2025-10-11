@@ -52,8 +52,6 @@ export type OrderCreate = {
 export type OrderPublic = {
     symbol: string;
     amount: number;
-    deleted_at?: (string | null);
-    deleted_by?: (string | null);
     alpaca_buy_order_id?: (string | null);
     alpaca_sell_order_id?: (string | null);
     alpaca_client_order_id?: (string | null);
@@ -70,6 +68,7 @@ export type OrderPublic = {
     filled_at?: (string | null);
     sold_at?: (string | null);
     error_message?: (string | null);
+    deleted_by?: (string | null);
     id: number;
 };
 
@@ -207,12 +206,6 @@ export type OrdersCreateOrderData = {
 };
 
 export type OrdersCreateOrderResponse = (OrderPublic);
-
-export type OrdersCreateOrderByAdminData = {
-    requestBody: OrderCreate;
-};
-
-export type OrdersCreateOrderByAdminResponse = (OrderPublic);
 
 export type OrdersSyncOrderData = {
     id: number;

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.api.routes import items, login, market, orders, private, users, utils
-from app.core.config import settings
+from app.core.config.app_settings import app_settings
 
 api_router = APIRouter()
 api_router.include_router(login.router)
@@ -12,5 +12,5 @@ api_router.include_router(orders.router)
 api_router.include_router(market.router)
 
 
-if settings.ENVIRONMENT == "local":
+if app_settings.ENVIRONMENT in ("local", "test", "ci-test-docker-compose"):
     api_router.include_router(private.router)

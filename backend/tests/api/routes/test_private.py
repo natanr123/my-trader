@@ -2,13 +2,13 @@ import uuid
 from fastapi.testclient import TestClient
 from sqlmodel import Session, select
 
-from app.core.config import settings
+from app.core.config.app_settings import app_settings
 from app.models.user import User
 
 
 def test_create_user(client: TestClient, db: Session) -> None:
     r = client.post(
-        f"{settings.API_V1_STR}/private/users/",
+        f"{app_settings.API_V1_STR}/private/users/",
         json={
             "email": "pollo@listo.com",
             "password": "password123",

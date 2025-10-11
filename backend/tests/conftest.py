@@ -1,10 +1,15 @@
+import os
+
+# Set test environment before any imports that load settings
+os.environ["ENVIRONMENT"] = "test"
+
 from collections.abc import Generator
 
 import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import Session, delete
 
-from app.core.config import settings
+from app.core.config.app_settings import app_settings
 from app.core.db import engine, init_db
 from app.main import app
 from app.models.item import Item

@@ -1,7 +1,7 @@
 from sqlmodel import Session, select
 
 import app.core.create_db_engine
-from app.core.config import settings
+from app.core.config.app_settings import app_settings
 from app.crud import crud
 from app.models.user import User, UserCreate
 
@@ -10,12 +10,12 @@ engine = app.core.create_db_engine.engine
 
 def seed_data(session: Session):
     user = session.exec(
-        select(User).where(User.email == settings.FIRST_SUPERUSER)
+        select(User).where(User.email == app_settings.FIRST_SUPERUSER)
     ).first()
     if not user:
         user_in = UserCreate(
-            email=settings.FIRST_SUPERUSER,
-            password=settings.FIRST_SUPERUSER_PASSWORD,
+            email=app_settings.FIRST_SUPERUSER,
+            password=app_settings.FIRST_SUPERUSER_PASSWORD,
             is_superuser=True,
         )
         user = crud.create_user(session=session, user_create=user_in)
