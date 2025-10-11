@@ -68,7 +68,6 @@ jobs:
       run: |
         cp ci/test/.env .env
         mkdir -p backend
-        cp ci/test/backend/alpaca.env backend/alpaca.env
     - run: uv sync
       working-directory: backend
     - run: npm ci
