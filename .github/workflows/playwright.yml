@@ -26,6 +26,8 @@ jobs:
       changed: ${{ steps.filter.outputs.changed }}
     steps:
     - uses: actions/checkout@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
     # For pull requests it's not necessary to checkout the code but for the main branch it is
     - uses: dorny/paths-filter@v3
       id: filter
