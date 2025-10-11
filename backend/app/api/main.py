@@ -12,5 +12,5 @@ api_router.include_router(orders.router)
 api_router.include_router(market.router)
 
 
-if app_settings.ENVIRONMENT in ("local", "test"):
+if app_settings.ENVIRONMENT in ("local", "test", "ci-test-docker-compose"):
     api_router.include_router(private.router)
