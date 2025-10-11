@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, MarketNextCloseDateResponse, MarketIsNextCloseTodayResponse, OrdersListOrdersResponse, OrdersCreateOrderData, OrdersCreateOrderResponse, OrdersCreateOrderByAdminData, OrdersCreateOrderByAdminResponse, OrdersSyncOrderData, OrdersSyncOrderResponse, OrdersShowOrderData, OrdersShowOrderResponse, OrdersDeleteOrderData, OrdersDeleteOrderResponse, OrdersSyncOrdersResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, MarketNextCloseDateResponse, MarketIsNextCloseTodayResponse, OrdersListOrdersResponse, OrdersCreateOrderData, OrdersCreateOrderResponse, OrdersSyncOrderData, OrdersSyncOrderResponse, OrdersShowOrderData, OrdersShowOrderResponse, OrdersDeleteOrderData, OrdersDeleteOrderResponse, OrdersSyncOrdersResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class ItemsService {
     /**
@@ -263,25 +263,6 @@ export class OrdersService {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/orders/',
-            body: data.requestBody,
-            mediaType: 'application/json',
-            errors: {
-                422: 'Validation Error'
-            }
-        });
-    }
-    
-    /**
-     * Create Order By Admin
-     * @param data The data for the request.
-     * @param data.requestBody
-     * @returns OrderPublic Successful Response
-     * @throws ApiError
-     */
-    public static createOrderByAdmin(data: OrdersCreateOrderByAdminData): CancelablePromise<OrdersCreateOrderByAdminResponse> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/v1/orders/by_admin',
             body: data.requestBody,
             mediaType: 'application/json',
             errors: {
