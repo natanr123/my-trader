@@ -68,6 +68,8 @@ jobs:
       run: |
         cp ci/test/.env .env
         mkdir -p backend
+      env:
+        ENVIRONMENT: ci-test-docker-compose
     - run: uv sync
       working-directory: backend
     - run: npm ci
