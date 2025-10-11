@@ -6,6 +6,9 @@ on:
     - opened
     - synchronize
 
+env:
+  ENVIRONMENT: ci-test-docker-compose
+
 jobs:
   generate-client:
     permissions:
