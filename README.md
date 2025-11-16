@@ -30,6 +30,8 @@ Server should start on localhost:8000
 
 ### To recreate the superuser:
 
+Set the credentials in backend/dotenv/local/super_user.env (or your necessary environment)
+
 docker compose exec backend "python" "app/initial_data.py"
 
 ## To start the frontend without docker-compose:
