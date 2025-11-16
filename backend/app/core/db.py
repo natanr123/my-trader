@@ -19,6 +19,14 @@ def seed_data(session: Session):
             is_superuser=True,
         )
         user = crud.create_user(session=session, user_create=user_in)
+    else:
+        # Update existing user to ensure correct credentials
+        user.email = app_settings.FIRST_SUPERUSER
+        user.hashed_password = crud.get_password_hash(app_settings.FIRST_SUPERUSER_PASSWORD)
+        user.is_superuser = True
+        session.add(user)
+        session.commit()
+        session.refresh(user)
 
 
 def init_db(session: Session) -> None:
