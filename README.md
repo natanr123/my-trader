@@ -18,11 +18,22 @@ Please notice that whichever db.env you choose it must match the POSTGRES creden
 
 Thank You
 
-To start backend locally without docker-compose:
+### To start the backend with docker-compose:
 
 cd backend
 
 uv sync
 
 docker compose watch
+
+Server should start on localhost:8000
+
+### To start the frontend without docker-compose:
+
+npm run dev:
+
+Frontend should start on localhost:5174
+
+
+
 
