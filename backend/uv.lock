@@ -88,6 +88,7 @@ dependencies = [
     { name = "sqlmodel" },
     { name = "tenacity" },
     { name = "transitions" },
+    { name = "typer" },
     { name = "uvloop" },
 ]
 
@@ -124,6 +125,7 @@ requires-dist = [
     { name = "sqlmodel", specifier = ">=0.0.21,<1.0.0" },
     { name = "tenacity", specifier = ">=8.2.3,<9.0.0" },
     { name = "transitions", specifier = ">=0.9.3" },
+    { name = "typer", specifier = ">=0.12.5" },
     { name = "uvloop", specifier = ">=0.21.0" },
 ]
 
