@@ -18,7 +18,7 @@ Please notice that whichever db.env you choose it must match the POSTGRES creden
 
 Thank You
 
-### To start the backend with docker-compose:
+## To start the backend with docker-compose:
 
 cd backend
 
@@ -28,7 +28,11 @@ docker compose watch
 
 Server should start on localhost:8000
 
-### To start the frontend without docker-compose:
+### To recreate the superuser:
+
+docker compose exec backend "python" "app/initial_data.py"
+
+## To start the frontend without docker-compose:
 
 npm run dev:
 
