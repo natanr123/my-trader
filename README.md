@@ -38,6 +38,10 @@ docker compose exec backend "python" "app/initial_data.py"
 
 npm run dev:
 
+If your backend is running on localhost:8000 then run this or replace the url with your backend url
+
+echo 'VITE_API_URL=http://localhost:8000' > frontend/.env
+
 Frontend should start on localhost:5174
 
 
