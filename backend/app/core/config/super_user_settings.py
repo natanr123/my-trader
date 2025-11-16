@@ -24,6 +24,9 @@ class SuperUserSettings(BaseSettings):
         extra="ignore",
     )
 
+    FIRST_SUPER_USER_USERNAME: EmailStr
+    FIRST_SUPER_USER_PASSWORD: str
+
 
 
 
