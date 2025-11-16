@@ -92,6 +92,7 @@ services:
       - .env
       - backend/dotenv/${ENVIRONMENT:-local}/alpaca.env
       - backend/dotenv/${ENVIRONMENT:-local}/db.env
+      - backend/dotenv/${ENVIRONMENT:-local}/super_user.env
     environment:
       - DOMAIN=${DOMAIN}
       - FRONTEND_HOST=${FRONTEND_HOST?Variable not set}
