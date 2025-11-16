@@ -3,12 +3,7 @@ import warnings
 from typing import Annotated, Any, Literal
 
 from pydantic import (
-    AnyUrl,
-    BeforeValidator,
     EmailStr,
-    HttpUrl,
-    computed_field,
-    model_validator,
 )
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -24,7 +19,7 @@ class SuperUserSettings(BaseSettings):
         extra="ignore",
     )
 
-    FIRST_SUPER_USER_USERNAME: EmailStr
+    FIRST_SUPER_USER_EMAIL: EmailStr
     FIRST_SUPER_USER_PASSWORD: str
 
 
