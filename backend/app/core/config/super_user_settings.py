@@ -14,7 +14,7 @@ from app.core.config.app_settings import app_settings
 
 
 class SuperUserSettings(BaseSettings):
-    mmodel_config = SettingsConfigDict(
+    model_config = SettingsConfigDict(
         env_file=f"dotenv/{app_settings.ENVIRONMENT}/super_user.env",
         extra="ignore",
     )
