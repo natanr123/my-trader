@@ -21,6 +21,8 @@ Thank You
 To start backend locally without docker-compose:
 
 cd backend
+
 uv sync
+
 docker compose watch
 
