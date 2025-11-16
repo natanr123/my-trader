@@ -23,10 +23,12 @@ dependencies = [
     "pyjwt<3.0.0,>=2.8.0",
     "alpaca-py>=0.42.1,<0.43.0",
     "transitions>=0.9.3",
+    "httptools>=0.6.4",  # Python 3.13 compatibility
+    "uvloop>=0.21.0",    # Python 3.13 compatibility
 ]
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "pytest<8.0.0,>=7.4.3",
     "mypy<2.0.0,>=1.8.0",
     "ruff<1.0.0,>=0.2.2",
