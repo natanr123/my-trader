@@ -18,3 +18,7 @@ Please notice that whichever db.env you choose it must match the POSTGRES creden
 
 Thank You
 
+To start locally without docker-compose:
+
+uv sync
+
