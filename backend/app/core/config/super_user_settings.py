@@ -25,6 +25,6 @@ class SuperUserSettings(BaseSettings):
 
 
 
-super_user_settings = SuperUserSettings()  # type: ignore
+super_user_settings = SuperUserSettings()
 
 __all__ = ["super_user_settings"]
