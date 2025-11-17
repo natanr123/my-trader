@@ -12,7 +12,7 @@ from app.core.config.app_settings import app_settings
 from sqlmodel import Session, SQLModel, create_engine
 from app.api.deps.deps import get_db
 from collections.abc import Generator
-from app.api.deps.alpaca_dep import get_alpaca_client_test
+from app.api.deps.alpaca_dep import get_my_alpaca_client_test
 
 
 
@@ -44,7 +44,7 @@ def client_fixture(session: Session):
 @pytest.fixture(name="alpaca_client")
 def alpaca_client_fixture() -> Generator[MyAlpacaClient, None, None]:
     def get_override():
-        return get_alpaca_client_test()
+        return get_my_alpaca_client_test()
     alpaca_client = get_override()
     yield alpaca_client
 
