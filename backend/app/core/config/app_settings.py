@@ -87,6 +87,6 @@ class Settings(BaseSettings):
                 raise ValueError(message)
 
 
-app_settings = Settings()  # type: ignore
+app_settings = Settings()
 
 __all__ = ["app_settings"]
