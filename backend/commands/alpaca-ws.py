@@ -2,6 +2,7 @@ import os
 from alpaca.data.live.stock import StockDataStream
 from alpaca.data.enums import DataFeed  # IEX (free) or SIP (paid)
 from app.api.deps.alpaca_dep import get_my_alpaca_client
+from app.clients.my_alpaca_client import AlpacaBar
 
 # This will always hold the latest completed 1-minute bar for AMD
 # latest_amd_bar = None
@@ -41,6 +42,15 @@ from app.api.deps.alpaca_dep import get_my_alpaca_client
 #
 # if __name__ == "__main__":
 #     main()
+
+async def on_amd_bar(bar: AlpacaBar):
+
+    print(
+        f"New AMD 1m bar: "
+        f"{bar.timestamp} "
+        f"o={bar.open} h={bar.high} l={bar.low} c={bar.close} v={bar.volume}"
+    )
+
 
 my_alpaca_client = get_my_alpaca_client()
 
