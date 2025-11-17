@@ -6,6 +6,7 @@ from sqlmodel import Session, select
 
 from app import crud
 from app.core.config.app_settings import app_settings
+from app.core.config.super_user_settings import super_user_settings
 from app.core.security import verify_password
 from app.models.user import User, UserCreate
 from tests.utils.utils import random_email, random_lower_string
@@ -19,7 +20,7 @@ def test_get_users_superuser_me(
     assert current_user
     assert current_user["is_active"] is True
     assert current_user["is_superuser"]
-    assert current_user["email"] == app_settings.FIRST_SUPERUSER
+    assert current_user["email"] == super_user_settings.FIRST_SUPER_USER_EMAIL
 
 
 def test_get_users_normal_user_me(
@@ -30,7 +31,7 @@ def test_get_users_normal_user_me(
     assert current_user
     assert current_user["is_active"] is True
     assert current_user["is_superuser"] is False
-    assert current_user["email"] == app_settings.EMAIL_TEST_USER
+    assert current_user["email"] == "test@example.com"
 
 
 def test_create_user_new_email(
@@ -196,7 +197,7 @@ def test_update_password_me(
 ) -> None:
     new_password = random_lower_string()
     data = {
-        "current_password": app_settings.FIRST_SUPERUSER_PASSWORD,
+        "current_password": super_user_settings.FIRST_SUPER_USER_PASSWORD,
         "new_password": new_password,
     }
     r = client.patch(
@@ -208,16 +209,16 @@ def test_update_password_me(
     updated_user = r.json()
     assert updated_user["message"] == "Password updated successfully"
 
-    user_query = select(User).where(User.email == app_settings.FIRST_SUPERUSER)
+    user_query = select(User).where(User.email == super_user_settings.FIRST_SUPER_USER_EMAIL)
     user_db = db.exec(user_query).first()
     assert user_db
-    assert user_db.email == app_settings.FIRST_SUPERUSER
+    assert user_db.email == super_user_settings.FIRST_SUPER_USER_EMAIL
     assert verify_password(new_password, user_db.hashed_password)
 
     # Revert to the old password to keep consistency in test
     old_data = {
         "current_password": new_password,
-        "new_password": app_settings.FIRST_SUPERUSER_PASSWORD,
+        "new_password": super_user_settings.FIRST_SUPER_USER_PASSWORD,
     }
     r = client.patch(
         f"{app_settings.API_V1_STR}/users/me/password",
@@ -227,7 +228,7 @@ def test_update_password_me(
     db.refresh(user_db)
 
     assert r.status_code == 200
-    assert verify_password(app_settings.FIRST_SUPERUSER_PASSWORD, user_db.hashed_password)
+    assert verify_password(super_user_settings.FIRST_SUPER_USER_PASSWORD, user_db.hashed_password)
 
 
 def test_update_password_me_incorrect_password(
@@ -267,8 +268,8 @@ def test_update_password_me_same_password_error(
     client: TestClient, superuser_token_headers: dict[str, str]
 ) -> None:
     data = {
-        "current_password": app_settings.FIRST_SUPERUSER_PASSWORD,
-        "new_password": app_settings.FIRST_SUPERUSER_PASSWORD,
+        "current_password": super_user_settings.FIRST_SUPER_USER_PASSWORD,
+        "new_password": super_user_settings.FIRST_SUPER_USER_PASSWORD,
     }
     r = client.patch(
         f"{app_settings.API_V1_STR}/users/me/password",
@@ -308,7 +309,7 @@ def test_register_user_already_exists_error(client: TestClient) -> None:
     password = random_lower_string()
     full_name = random_lower_string()
     data = {
-        "email": app_settings.FIRST_SUPERUSER,
+        "email": super_user_settings.FIRST_SUPER_USER_EMAIL,
         "password": password,
         "full_name": full_name,
     }
@@ -458,7 +459,7 @@ def test_delete_user_not_found(
 def test_delete_user_current_super_user_error(
     client: TestClient, superuser_token_headers: dict[str, str], db: Session
 ) -> None:
-    super_user = crud.get_user_by_email(session=db, email=app_settings.FIRST_SUPERUSER)
+    super_user = crud.get_user_by_email(session=db, email=super_user_settings.FIRST_SUPER_USER_EMAIL)
     assert super_user
     user_id = super_user.id
 

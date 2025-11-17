@@ -4,6 +4,7 @@ from fastapi.testclient import TestClient
 from sqlmodel import Session
 
 from app.core.config.app_settings import app_settings
+from app.core.config.super_user_settings import super_user_settings
 from app.core.security import verify_password
 from app.crud import create_user
 from app.models.user import UserCreate
@@ -14,8 +15,8 @@ from tests.utils.utils import random_email, random_lower_string
 
 def test_get_access_token(client: TestClient) -> None:
     login_data = {
-        "username": app_settings.FIRST_SUPERUSER,
-        "password": app_settings.FIRST_SUPERUSER_PASSWORD,
+        "username": super_user_settings.FIRST_SUPER_USER_EMAIL,
+        "password": super_user_settings.FIRST_SUPER_USER_PASSWORD,
     }
     r = client.post(f"{app_settings.API_V1_STR}/login/access-token", data=login_data)
     tokens = r.json()
@@ -26,7 +27,7 @@ def test_get_access_token(client: TestClient) -> None:
 
 def test_get_access_token_incorrect_password(client: TestClient) -> None:
     login_data = {
-        "username": app_settings.FIRST_SUPERUSER,
+        "username": super_user_settings.FIRST_SUPER_USER_EMAIL,
         "password": "incorrect",
     }
     r = client.post(f"{app_settings.API_V1_STR}/login/access-token", data=login_data)
