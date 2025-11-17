@@ -25,7 +25,7 @@ wheels = [
 
 [[package]]
 name = "alpaca-py"
-version = "0.42.1"
+version = "0.42.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "msgpack" },
@@ -35,9 +35,9 @@ dependencies = [
     { name = "sseclient-py" },
     { name = "websockets" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/23/23/f33b24af8dfd3149f490685dda1ee64f88d15b75fbf9057ac5c83e58268c/alpaca_py-0.42.1.tar.gz", hash = "sha256:a44bf45d40d34fbcba1125a3144ddaea62b44806cfb25e3d948029bb5a233a37", size = 97671, upload-time = "2025-08-29T18:40:52.432Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/23/ea/4aae04688b4ae77a952c81f53118f13f45b57679142c81640e7c1132f4c2/alpaca_py-0.42.2.tar.gz", hash = "sha256:e59c3f44b72009cac66507bee750a1625b55a235106051ab49ac82332b282938", size = 97703, upload-time = "2025-09-26T16:14:03.78Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ef/b5/efdf8d3d206632b0dfaad07193dd396413235f9d9a96c1843d83594851d4/alpaca_py-0.42.1-py3-none-any.whl", hash = "sha256:234fea37151d4d5995de6d4f2fff24d584120214eb9f39198c399d1000004efa", size = 122157, upload-time = "2025-08-29T18:40:50.9Z" },
+    { url = "https://files.pythonhosted.org/packages/23/0c/6b04b2275f4e4bc58e67e08522f1f168800d62ddc306e26be06b1548b49b/alpaca_py-0.42.2-py3-none-any.whl", hash = "sha256:0f85b58a05563d47775f23918c47fbbbc77e7661edc3e87467383b4118ed1ad2", size = 122225, upload-time = "2025-09-26T16:14:02.779Z" },
 ]
 
 [[package]]
