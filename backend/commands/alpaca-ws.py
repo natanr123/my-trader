@@ -43,3 +43,4 @@ from app.api.deps.alpaca_dep import get_my_alpaca_client
 #     main()
 
 my_alpaca_client = get_my_alpaca_client()
+
