@@ -1,11 +1,8 @@
-import warnings
 
 from pydantic import (
     PostgresDsn,
-    model_validator,
 )
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing_extensions import Self
 
 from app.core.config.app_settings import app_settings
 

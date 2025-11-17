@@ -1,5 +1,6 @@
+from collections.abc import Awaitable, Callable
 from datetime import datetime, timezone
-from typing import Any, Awaitable, Callable
+from typing import Any
 from uuid import UUID
 
 from alpaca.data import StockHistoricalDataClient
@@ -9,12 +10,13 @@ from alpaca.data.live.stock import StockDataStream
 from alpaca.data.models.bars import Bar as AlpacaBar
 from alpaca.data.requests import StockLatestQuoteRequest
 from alpaca.trading.client import TradingClient
-from alpaca.trading.enums import OrderStatus as AlpacaOrderStatus
 from alpaca.trading.enums import OrderSide, TimeInForce
+from alpaca.trading.enums import OrderStatus as AlpacaOrderStatus
 from alpaca.trading.models import Clock as AlpacaClock
 from alpaca.trading.models import Order as AlpacaOrder
 from alpaca.trading.models import Position as AlpacaPosition
 from alpaca.trading.requests import MarketOrderRequest
+
 
 class MyAlpacaClient:
     def __init__(self, credentials: dict[str, Any]):

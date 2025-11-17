@@ -1,10 +1,10 @@
 from sqlmodel import Session, select
 
 import app.core.create_db_engine
-from app.crud import crud
-from app.models.user import User, UserCreate
 from app.core.config.super_user_settings import super_user_settings
 from app.core.security import get_password_hash
+from app.crud import crud
+from app.models.user import User, UserCreate
 
 engine = app.core.create_db_engine.engine
 

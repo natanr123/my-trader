@@ -6,7 +6,7 @@ router = APIRouter(prefix="/market", tags=["market"])
 
 
 @router.get("/next_close_date")
-def next_close_date(alpaca_client: AlpacaDep) -> dict:
+def next_close_date(alpaca_client: AlpacaDep) -> dict[str, str]:
     return {"date": alpaca_client.get_next_close().date().isoformat()}
 
 

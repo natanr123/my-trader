@@ -1,6 +1,7 @@
 from app.api.deps.alpaca_dep import get_my_alpaca_client
 from app.clients.my_alpaca_client import AlpacaBar
 
+
 async def on_amd_bar(bar: AlpacaBar) -> None:
     print(
         f"New AMD 1m bar: "

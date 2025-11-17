@@ -1,4 +1,5 @@
 import logging
+from collections.abc import Sequence
 
 from fastapi import APIRouter, HTTPException
 from sqlmodel import select
@@ -7,7 +8,6 @@ from app.api.deps import CurrentUser, SessionDep
 from app.api.deps.alpaca_dep import AlpacaDep
 from app.crud.order_crud import OrderCrud
 from app.models.order import Order, OrderCreate, OrderPublic
-from typing import Sequence
 
 logger = logging.getLogger(__name__)
 
@@ -89,9 +89,7 @@ def delete_order(id: int, session: SessionDep, current_user: CurrentUser) -> Non
 
 
 @router.post("/sync")
-def sync_orders(session: SessionDep, alpaca_client: AlpacaDep):
-    # my_file_log = MyFileLog('tmp/syncs.log')
-
+def sync_orders(session: SessionDep, alpaca_client: AlpacaDep) -> dict[str, str]:
     logger.info("Syncing orders")
     statement = select(Order)
     results = session.exec(statement)
