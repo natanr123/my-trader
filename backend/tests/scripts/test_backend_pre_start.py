@@ -12,8 +12,13 @@ def test_init_successful_connection() -> None:
     exec_mock = MagicMock(return_value=True)
     session_mock.configure_mock(**{"exec.return_value": exec_mock})
 
+    # Mock Session to work as a context manager
+    session_context_mock = MagicMock()
+    session_context_mock.__enter__ = MagicMock(return_value=session_mock)
+    session_context_mock.__exit__ = MagicMock(return_value=False)
+
     with (
-        patch("sqlmodel.Session", return_value=session_mock),
+        patch("sqlmodel.Session", return_value=session_context_mock),
         patch.object(logger, "info"),
         patch.object(logger, "error"),
         patch.object(logger, "warn"),
