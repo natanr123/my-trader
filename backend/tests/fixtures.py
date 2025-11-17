@@ -1,4 +1,5 @@
 import pytest
+from sqlalchemy import Engine
 from sqlmodel import Session, SQLModel
 from sqlmodel.pool import StaticPool
 
@@ -13,15 +14,14 @@ from sqlmodel import Session, SQLModel, create_engine
 from app.api.deps.deps import get_db
 from collections.abc import Generator
 from app.api.deps.alpaca_dep import get_my_alpaca_client_test
+from app.core.db import init_db
 
 
-
-def create_test_db_engine():
+def create_test_db_engine() -> Engine:
     return create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
 
 @pytest.fixture(name="session")
-def session_fixture():
-    from app.core.db import init_db
+def session_fixture() -> Generator[Session, None, None]:
     engine = create_test_db_engine()
     SQLModel.metadata.create_all(engine)
     with Session(engine) as session:
@@ -29,7 +29,7 @@ def session_fixture():
         yield session
 
 @pytest.fixture(name="db")
-def db_fixture(session):
+def db_fixture(session) -> Session:
     return session
 
 @pytest.fixture(name="client")
