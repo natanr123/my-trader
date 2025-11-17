@@ -14,6 +14,7 @@ from alpaca.trading.requests import MarketOrderRequest
 from alpaca.data.live.stock import StockDataStream
 from alpaca.data.enums import DataFeed
 from alpaca.data.models.bars import Bar as AlpacaBar
+from alpaca.data.live.crypto import CryptoDataStream
 
 
 # AlpacaOrderStatus Is imported in other files. And it is more friendly to be imported from here and confused with the regular "order" status
@@ -34,10 +35,15 @@ class MyAlpacaClient:
             secret_key=credentials["secret-key"],
         )
 
-        self.stream = StockDataStream(
+        self.stocks_stream = StockDataStream(
             api_key=credentials["api-key"],
             secret_key=credentials["secret-key"],
             feed=DataFeed.IEX,
+        )
+
+        self.crypto_stream = CryptoDataStream(
+            api_key=credentials["api-key"],
+            secret_key=credentials["secret-key"],
         )
 
     def get_current_price(self, symbol: str) -> float:
@@ -148,9 +154,15 @@ class MyAlpacaClient:
         next_close = clock.next_close.astimezone(timezone.utc)
         return next_close.date() == current_time_utc.date()
 
-    def subscribe_bar(self, symbol: str, on_bar):
-        stream = self.stream
+    def subscribe_bar_stocks(self, symbol: str, on_bar):
+        stream = self.stocks_stream
         stream.subscribe_bars(on_bar, symbol)
         stream.run()
+
+    def subscribe_bar_crypto(self, pair: str, on_bar):
+        stream = self.crypto_stream
+        stream.subscribe_bars(on_bar, pair)
+        stream.run()
+
 
 
