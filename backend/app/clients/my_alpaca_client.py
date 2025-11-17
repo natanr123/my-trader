@@ -9,7 +9,8 @@ from alpaca.data.live.stock import StockDataStream
 from alpaca.data.models.bars import Bar as AlpacaBar
 from alpaca.data.requests import StockLatestQuoteRequest
 from alpaca.trading.client import TradingClient
-from alpaca.trading.enums import OrderSide, OrderStatus, TimeInForce
+from alpaca.trading.enums import OrderStatus as AlpacaOrderStatus
+from alpaca.trading.enums import OrderSide, TimeInForce
 from alpaca.trading.models import Clock as AlpacaClock
 from alpaca.trading.models import Order as AlpacaOrder
 from alpaca.trading.models import Position as AlpacaPosition
@@ -161,5 +162,4 @@ class MyAlpacaClient:
 
 
 # AlpacaOrderStatus Is imported in other files. And it is more friendly to be imported from here and confused with the regular "order" status
-AlpacaOrderStatus = OrderStatus
-__all__ = ["MyAlpacaClient", "AlpacaOrderStatus", "AlpacaBar"]
+__all__ = ["MyAlpacaClient", "AlpacaOrder", "AlpacaOrderStatus", "AlpacaBar"]

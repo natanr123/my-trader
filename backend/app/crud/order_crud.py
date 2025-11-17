@@ -53,7 +53,7 @@ class OrderCrud:
     @classmethod
     def _handle_buy_pending_new(
         cls, order: Order, sync_data: OrderSyncData, alpaca_client: MyAlpacaClient
-    ):
+    ) -> None:
         if sync_data.buy_order.status == AlpacaOrderStatus.ACCEPTED:
             order.buy_accepted()
         elif sync_data.buy_order.status == AlpacaOrderStatus.FILLED:
@@ -68,7 +68,7 @@ class OrderCrud:
     @classmethod
     def _handle_buy_accepted(
         cls, order: Order, sync_data: OrderSyncData, alpaca_client: MyAlpacaClient
-    ):
+    ) -> None:
         if sync_data.buy_order.status == AlpacaOrderStatus.ACCEPTED:
             logger.info(
                 "Order id=%s waiting for it to be filled. Nothing to do for now",
@@ -86,7 +86,7 @@ class OrderCrud:
             )
 
     @classmethod
-    def _handle_sell_pending_new(cls, order: Order, sync_data: OrderSyncData):
+    def _handle_sell_pending_new(cls, order: Order, sync_data: OrderSyncData) -> None:
         if not sync_data.sell_order:
             raise Exception(
                 "Order in sell_pending_new but no matching alpaca sell order"
@@ -101,7 +101,7 @@ class OrderCrud:
             )
 
     @classmethod
-    def apply_sell_rules(cls, order: Order, alpaca_client: MyAlpacaClient):
+    def apply_sell_rules(cls, order: Order, alpaca_client: MyAlpacaClient) -> None:
         logger.info("apply_sell_rules order id=%s status=%s", order.id, order.status)
         if order.status == VirtualOrderStatus.BUY_FILLED:
             assert order.force_sell_at is not None
@@ -119,7 +119,7 @@ class OrderCrud:
                 )
 
     @classmethod
-    def sync_order_status(cls, order: Order, alpaca_client: MyAlpacaClient):
+    def sync_order_status(cls, order: Order, alpaca_client: MyAlpacaClient) -> None:
         sync_data = cls._fetch_order_data(order, alpaca_client)
         logger.info(
             "Working on order id=%s status=%s alpaca_status=%s alpaca_sell_order=%s user_email=%s",
