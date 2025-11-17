@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from typing import Any
+from typing import Any, Awaitable, Callable
 from uuid import UUID
 
 from alpaca.data import StockHistoricalDataClient
@@ -148,14 +148,14 @@ class MyAlpacaClient:
         next_close = clock.next_close.astimezone(timezone.utc)
         return next_close.date() == current_time_utc.date()
 
-    def subscribe_bar_stocks(self, symbol: str, on_bar):
+    def subscribe_bar_stocks(self, symbol: str, on_bar: Callable[[AlpacaBar], Awaitable[None]]) -> None:
         stream = self.stocks_stream
-        stream.subscribe_bars(on_bar, symbol)
+        stream.subscribe_bars(on_bar, symbol)  # type: ignore[arg-type]
         stream.run()
 
-    def subscribe_bar_crypto(self, pair: str, on_bar):
+    def subscribe_bar_crypto(self, pair: str, on_bar: Callable[[AlpacaBar], Awaitable[None]]) -> None:
         stream = self.crypto_stream
-        stream.subscribe_bars(on_bar, pair)
+        stream.subscribe_bars(on_bar, pair)  # type: ignore[arg-type]
         stream.run()
 
 
