@@ -151,5 +151,6 @@ class MyAlpacaClient:
     def subscribe_bar(self, symbol: str, on_bar):
         stream = self.stream
         stream.subscribe_bars(on_bar, symbol)
+        stream.run()
 
 

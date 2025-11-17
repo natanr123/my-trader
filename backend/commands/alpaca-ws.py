@@ -53,4 +53,5 @@ async def on_amd_bar(bar: AlpacaBar):
 
 
 my_alpaca_client = get_my_alpaca_client()
+my_alpaca_client.subscribe_bar(symbol='AMD', on_bar=on_amd_bar)
 
