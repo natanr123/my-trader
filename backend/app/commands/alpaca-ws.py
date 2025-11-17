@@ -1,8 +1,10 @@
+import logging
+
 from app.api.deps.alpaca_dep import get_my_alpaca_client
 from app.clients.my_alpaca_client import AlpacaBar
-import logging
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 async def on_amd_bar(bar: AlpacaBar) -> None:
     logger.info(
@@ -10,7 +12,6 @@ async def on_amd_bar(bar: AlpacaBar) -> None:
         f"{bar.timestamp} "
         f"o={bar.open} h={bar.high} l={bar.low} c={bar.close} v={bar.volume}"
     )
-
 
 my_alpaca_client = get_my_alpaca_client()
 logger.info("Subscribing to AMD 1m bars...")
