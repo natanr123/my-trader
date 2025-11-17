@@ -137,3 +137,4 @@ class MyAlpacaClient:
         current_time_utc = clock.timestamp.astimezone(timezone.utc)
         next_close = clock.next_close.astimezone(timezone.utc)
         return next_close.date() == current_time_utc.date()
+
