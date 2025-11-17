@@ -8,7 +8,7 @@ from app.core.config.super_user_settings import super_user_settings
 engine = app.core.create_db_engine.engine
 
 
-def seed_data(session: Session):
+def seed_data(session: Session) -> None:
     user = session.exec(
         select(User).where(User.email == super_user_settings.FIRST_SUPER_USER_EMAIL)
     ).first()
