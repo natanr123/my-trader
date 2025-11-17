@@ -4,6 +4,7 @@ import app.core.create_db_engine
 from app.crud import crud
 from app.models.user import User, UserCreate
 from app.core.config.super_user_settings import super_user_settings
+from app.core.security import get_password_hash
 
 engine = app.core.create_db_engine.engine
 
@@ -22,7 +23,7 @@ def seed_data(session: Session) -> None:
     else:
         # Update existing user to ensure correct credentials
         user.email = super_user_settings.FIRST_SUPER_USER_EMAIL
-        user.hashed_password = crud.get_password_hash(super_user_settings.FIRST_SUPER_USER_PASSWORD)
+        user.hashed_password = get_password_hash(super_user_settings.FIRST_SUPER_USER_PASSWORD)
         user.is_superuser = True
         session.add(user)
         session.commit()
