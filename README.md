@@ -34,6 +34,8 @@ Set the credentials in backend/dotenv/local/super_user.env (or your necessary en
 
 docker compose exec backend "python" "app/initial_data.py"
 
+To lint the code: uv run bash scripts/lint.sh
+
 ## To start the frontend without docker-compose:
 
 npm run dev:
