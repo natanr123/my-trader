@@ -20,7 +20,8 @@ class AlpacaSettings(BaseSettings):
     ALPACA_SECRET_KEY: str
     ALPACA_PAPER: bool
 
-    @computed_field
+    # used property instead of computed_field to mypy error
+    @property
     def credentials(self) -> dict[str, Any]:
         return {
             "api-key": self.ALPACA_API_KEY,
